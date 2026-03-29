@@ -1,1 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UFC MadFut</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e50914;
+    --gold: #f5a623;
+    --dark: #0a0a0f;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --text: #f0f0f0;
+    --sub: #888;
+  }
 
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background effect */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(229,9,20,0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(245,166,35,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { display: none; position: relative; z-index: 1; }
+  .page.active { display: block; }
+
+  /* ===== LOGIN PAGE ===== */
+  #loginPage {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  #loginPage.active { display: flex; }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 6rem);
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .logo span { color: var(--red); }
+
+  .logo-sub {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 8px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 50px;
+  }
+
+  .login-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 36px;
+    width: 100%;
+    max-width: 380px;
+    backdrop-filter: blur(10px);
+  }
+
+  .login-box h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    color: var(--gold);
+  }
+
+  .input-group {
+    margin-bottom: 14px;
+  }
+  .input-group label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sub);
+    margin-bottom: 6px;
+  }
+  .input-group input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: white;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-group input:focus { border-color: var(--red); }
+
+  .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-row.col { flex-direction: column; }
+
+  .btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    text-transform: uppercase;
+  }
+  .btn-red { background: var(--red); color: white; }
+  .btn-red:hover { background: #ff1a28; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: white; border: 1px solid var(--card-border); }
+  .btn-outline:hover { border-color: white; }
+  .btn-gold { background: var(--gold); color: #000; }
+  .btn-gold:hover { background: #ffb84d; }
+  .btn-ghost { background: rgba(255,255,255,0.05); color: var(--sub); border: 1px solid var(--card-border); }
+  .btn-ghost:hover { color: white; background: rgba(255,255,255,0.1); }
+
+  #loginMsg { color: var(--red); font-size: 0.85rem; margin-top: 10px; min-height: 20px; }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--sub); font-size: 0.75rem; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
+
+  /* ===== GAME PAGE ===== */
+  #gamePage { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  #gamePage.active { display: flex; }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background: rgba(0,0,0,0.6);
+    border-bottom: 1px solid var(--card-border);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+  }
+  .topbar-logo span { color: var(--red); }
+  .coins-badge {
+    background: rgba(245,166,35,0.15);
+    border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--gold);
+  }
+  .topbar-user { font-size: 0.8rem; color: var(--sub); }
+
+  /* Nav */
+  .nav {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid var(--card-border);
+    overflow-x: auto;
+  }
+  .nav-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sub);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover, .nav-btn.active { background: rgba(229,9,20,0.15); color: white; }
+  .nav-btn.active { border-bottom: 2px solid var(--red); }
+
+  /* Content */
+  .content { padding: 24px; max-width: 900px; margin: 0 auto; flex: 1; overflow-y: auto; }
+
+  /* Section header */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+  .section-title span { color: var(--red); }
+  .section-sub { color: var(--sub); font-size: 0.85rem; margin-bottom: 24px; }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
+
+  /* Fighter Card */
+  .fighter-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    transition: all 0.2s;
+  }
+  .fighter-card:hover { border-color: rgba(255,255,255,0.15); }
+  .fighter-card.prime { border-color: rgba(245,166,35,0.3); background: rgba(245,166,35,0.04); }
+
+  .fighter-info-left { display: flex; flex-direction: column; }
+  .fighter-name { font-weight: 700; font-size: 0.95rem; }
+  .fighter-meta { font-size: 0.75rem; color: var(--sub); margin-top: 2px; }
+
+  .fighter-right { display: flex; align-items: center; gap: 10px; }
+  .stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 1px; }
+  .prime-badge {
+    background: rgba(245,166,35,0.2);
+    border: 1px solid rgba(245,166,35,0.4);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .sell-btn {
+    background: rgba(229,9,20,0.15);
+    border: 1px solid rgba(229,9,20,0.2);
+    color: var(--red);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sell-btn:hover { background: rgba(229,9,20,0.3); }
+
+  /* Draft */
+  .weight-classes { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+
+  .draft-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 80px;
+  }
+  .draft-card:hover:not(.picked) { border-color: var(--red); background: rgba(229,9,20,0.06); }
+  .draft-card.picked { border-color: rgba(229,9,20,0.5); background: rgba(229,9,20,0.08); cursor: default; }
+
+  .draft-weight-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+
+  .draft-options { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .draft-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    color: #fff;
+  }
+  .draft-option span { color: #fff !important; }
+  .draft-option b { color: #fff; font-size: 0.9rem; }
+  .pick-btn {
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .pick-btn:hover { background: #ff1a28; }
+
+  /* Fight result */
+  .fight-result-box {
+    background: rgba(229,9,20,0.08);
+    border: 1px solid rgba(229,9,20,0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .fight-result-box .winner { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--gold); letter-spacing: 2px; }
+
+  /* Packs grid */
+  .packs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .pack-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pack-card:hover { border-color: var(--red); transform: translateY(-2px); }
+  .pack-card.prime-pack { border-color: rgba(245,166,35,0.3); }
+  .pack-card.prime-pack:hover { border-color: var(--gold); }
+  .pack-icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .pack-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; margin-bottom: 4px; }
+  .pack-price { font-size: 0.75rem; color: var(--gold); font-weight: 700; }
+
+  /* Pack result popup */
+  .pack-popup { display: none; }
+
+  /* Full screen pack opening overlay */
+  #packOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #05050d;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+  }
+  #packOverlay.show { display: flex; }
+
+  /* Phase 1 – shaking pack */
+  #packPhase1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .big-pack-icon {
+    font-size: 9rem;
+    animation: packShake 0.35s infinite;
+    filter: drop-shadow(0 0 50px rgba(229,9,20,0.7));
+    cursor: default;
+    user-select: none;
+  }
+  @keyframes packShake {
+    0%   { transform: rotate(-7deg) scale(1); }
+    50%  { transform: rotate(7deg) scale(1.1); }
+    100% { transform: rotate(-7deg) scale(1); }
+  }
+  .opening-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 8px;
+    color: var(--sub);
+    margin-top: 28px;
+    animation: blink 0.7s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* Phase 2 – scratch reveal */
+  #packPhase2 {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  .scratch-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 6px;
+    color: var(--sub);
+    margin-bottom: 20px;
+    animation: blink 1s infinite;
+  }
+
+  /* The scratch card */
+  .scratch-wrap {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 24px;
+    overflow: hidden;
+    cursor: crosshair;
+    box-shadow: 0 0 60px rgba(229,9,20,0.3);
+  }
+  .scratch-wrap.prime-wrap { box-shadow: 0 0 60px rgba(245,166,35,0.4); }
+
+  /* Underneath: the actual fighter card */
+  .scratch-under {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #12122a, #1e1e3f);
+    border-radius: 24px;
+    padding: 24px;
+    z-index: 1;
+  }
+  .scratch-under.prime-under { background: linear-gradient(135deg, #1c1400, #2e2000); }
+  #scratchStars { font-size: 1.6rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 10px; }
+  #scratchName {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  #scratchWeight { font-size: 0.75rem; letter-spacing: 4px; color: var(--sub); text-transform: uppercase; }
+  #scratchPrime {
+    margin-top: 10px;
+    background: linear-gradient(135deg, #f5a623, #e8860f);
+    color: #000;
+    font-weight: 900;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    display: none;
+  }
+
+  /* Canvas on top for scratching */
+  #scratchCanvas {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: 24px;
+    cursor: crosshair;
+  }
+
+  /* Revealed state */
+  .scratch-wrap.revealed #scratchCanvas { display: none; }
+
+  .scratch-hint {
+    font-size: 0.75rem;
+    color: var(--sub);
+    margin-top: 16px;
+    letter-spacing: 2px;
+  }
+
+  /* Phase 3 – full reveal */
+  #packPhase3 {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  .final-card {
+    background: linear-gradient(135deg, #12122a, #1e1e3f);
+    border-radius: 24px;
+    padding: 48px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: revealPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    width: 100%;
+    border: 1px solid rgba(229,9,20,0.3);
+  }
+  .final-card.prime-final {
+    background: linear-gradient(135deg, #1c1400, #2e2000);
+    border-color: rgba(245,166,35,0.4);
+  }
+  .final-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(229,9,20,0.1), transparent 70%);
+    pointer-events: none;
+  }
+  .final-card.prime-final::after {
+    background: radial-gradient(ellipse at 50% 30%, rgba(245,166,35,0.15), transparent 70%);
+  }
+  @keyframes revealPop {
+    0%   { transform: scale(0.7); opacity: 0; }
+    70%  { transform: scale(1.04); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  #finalStars { font-size: 2rem; color: var(--gold); letter-spacing: 4px; margin-bottom: 14px; }
+  #finalName {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  #finalWeight { font-size: 0.75rem; letter-spacing: 4px; color: var(--sub); text-transform: uppercase; margin-bottom: 16px; }
+  #finalPrime {
+    display: none;
+    background: linear-gradient(135deg, #f5a623, #e8860f);
+    color: #000;
+    font-weight: 900;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .final-close-btn {
+    margin-top: 28px;
+    padding: 13px 44px;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+  .final-close-btn:hover { background: #ff1a28; transform: scale(1.04); }
+  .final-close-btn.prime-btn { background: var(--gold); color: #000; }
+  .final-close-btn.prime-btn:hover { background: #ffb84d; }
+
+  .pulled-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; margin: 10px 0; }
+
+  /* Fight log */
+  .log-entry {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  /* Shop */
+  .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .shop-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .shop-item:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
+  .shop-item-icon { font-size: 3rem; margin-bottom: 12px; }
+  .shop-item-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 6px; }
+  .shop-item-price { color: var(--gold); font-weight: 700; font-size: 0.9rem; }
+
+  /* Fight page */
+  .fight-selects { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .vs-badge { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--red); text-align: center; }
+  select {
+    width: 100%;
+    background: #1c1c2e;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #fff;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+  }
+  select option {
+    background: #1c1c2e;
+    color: #fff;
+  }
+  select:focus { border-color: var(--red); }
+
+  .mode-select { margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--sub); }
+  .mode-select select { width: auto; }
+
+  /* Home */
+  .home-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; text-align: center; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--red); line-height: 1; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--sub); margin-top: 4px; }
+
+  .home-tips { font-size: 0.85rem; color: var(--sub); line-height: 1.9; }
+  .home-tips b { color: var(--text); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+  .empty-state { text-align: center; color: var(--sub); padding: 60px 20px; }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-state p { font-size: 0.9rem; }
+
+  /* Notification toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(20,20,20,0.95);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 0.9rem;
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.gold { border-color: rgba(245,166,35,0.4); color: var(--gold); }
+  .toast.green { border-color: rgba(34,197,94,0.4); color: #22c55e; }
+  .toast.red { border-color: rgba(229,9,20,0.4); color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage" class="page active">
+  <div class="logo">UFC <span>MAD</span>FUT</div>
+  <div class="logo-sub">Ultimate Card Game</div>
+  <div class="login-box">
+    <h2>Sign In</h2>
+    <div class="input-group">
+      <label>Username</label>
+      <input id="username" type="text" placeholder="Enter username">
+    </div>
+    <div class="input-group">
+      <label>Password</label>
+      <input id="password" type="password" placeholder="Enter password">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-red" onclick="login()">Login</button>
+      <button class="btn btn-outline" onclick="register()">Register</button>
+    </div>
+    <div id="loginMsg"></div>
+    <div class="divider">or</div>
+    <button class="btn btn-ghost" style="width:100%" onclick="guestPlay()">🥊 Play as Guest</button>
+  </div>
+</div>
+
+<!-- ===== GAME PAGE ===== -->
+<div id="gamePage" class="page">
+  <div class="topbar">
+    <div class="topbar-logo">UFC <span>MAD</span>FUT</div>
+    <div class="coins-badge">🪙 <span id="coins">0</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="topbar-user" id="topbarUser"></span>
+      <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.75rem" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showTab('home',this)">🏠 Home</button>
+    <button class="nav-btn" onclick="showTab('draft',this)">📝 Draft</button>
+    <button class="nav-btn" onclick="showTab('fight',this)">⚔️ Fight</button>
+    <button class="nav-btn" onclick="showTab('packs',this)">🎁 Packs</button>
+    <button class="nav-btn" onclick="showTab('collection',this)">📦 Collection</button>
+    <button class="nav-btn" onclick="showTab('shop',this)">🛒 Shop</button>
+    <button class="nav-btn" onclick="showTab('log',this)">📜 History</button>
+  </div>
+
+  <div class="content">
+
+    <!-- HOME -->
+    <div id="tab-home" class="page active">
+      <div class="section-title">WELCOME <span>BACK</span></div>
+      <div class="section-sub">Your UFC card collection dashboard</div>
+      <div class="home-stats">
+        <div class="stat-card"><div class="stat-num" id="statCards">0</div><div class="stat-label">Cards</div></div>
+        <div class="stat-card"><div class="stat-num" id="statPrime">0</div><div class="stat-label">Prime Cards</div></div>
+        <div class="stat-card"><div class="stat-num" id="statFights">0</div><div class="stat-label">Fights</div></div>
+        <div class="stat-card"><div class="stat-num" id="statCoins2">0</div><div class="stat-label">Coins</div></div>
+      </div>
+      <div class="card">
+        <div class="home-tips">
+          <b>🎁 Open Packs</b> to get new fighters for free<br>
+          <b>🛒 Shop</b> – spend coins for guaranteed high-rated cards<br>
+          <b>📝 Draft</b> – build a team vs the bot across all weight classes<br>
+          <b>⚔️ Fight</b> – pick any two fighters for a single fight<br>
+          <b>💰 Sell</b> duplicates in your collection to earn coins
+        </div>
+      </div>
+    </div>
+
+    <!-- DRAFT -->
+    <div id="tab-draft" class="page">
+      <div class="section-title">DRAFT <span>MODE</span></div>
+      <div class="section-sub">Pick one fighter per weight class, then fight the bot</div>
+      <div class="weight-classes" id="draftContainer"></div>
+      <button class="btn btn-red" id="fightButton" style="display:none;width:100%;padding:16px;font-size:1rem;letter-spacing:2px" onclick="runDraftFight()">⚔️ FIGHT THE BOT</button>
+      <div id="draftResult"></div>
+    </div>
+
+    <!-- FIGHT -->
+    <div id="tab-fight" class="page">
+      <div class="section-title">SINGLE <span>FIGHT</span></div>
+      <div class="section-sub">Pick two fighters in the same weight class</div>
+      <div class="mode-select">
+        Mode: <select id="fightMode" onchange="populateFightDropdowns()">
+          <option value="collection">My Collection</option>
+          <option value="all">All Fighters</option>
+        </select>
+      </div>
+      <div class="fight-selects">
+        <select id="fighter1"></select>
+        <div class="vs-badge">VS</div>
+        <select id="fighter2"></select>
+      </div>
+      <button class="btn btn-red" style="width:100%;padding:14px;letter-spacing:2px" onclick="simulateFight()">⚔️ FIGHT</button>
+      <div id="fightResult"></div>
+    </div>
+
+    <!-- PACKS -->
+    <div id="tab-packs" class="page">
+      <div class="section-title">OPEN <span>PACKS</span></div>
+      <div class="section-sub">Free packs – open one from each weight class</div>
+      <div class="packs-grid">
+        <div class="pack-card" onclick="openPack('Bantamweight')"><div class="pack-icon">📦</div><div class="pack-name">Bantamweight</div><div class="pack-price">FREE</div></div>
+        <div class="pack-card" onclick="openPack('Featherweight')"><div class="pack-icon">📦</div><div class="pack-name">Featherweight</div><div class="pack-price">FREE</div></div>
+        <div class="pack-card" onclick="openPack('Lightweight')"><div class="pack-icon">📦</div><div class="pack-name">Lightweight</div><div class="pack-price">FREE</div></div>
+        <div class="pack-card" onclick="openPack('Welterweight')"><div class="pack-icon">📦</div><div class="pack-name">Welterweight</div><div class="pack-price">FREE</div></div>
+        <div class="pack-card" onclick="openPack('Middleweight')"><div class="pack-icon">📦</div><div class="pack-name">Middleweight</div><div class="pack-price">FREE</div></div>
+        <div class="pack-card" onclick="openPack('Heavyweight')"><div class="pack-icon">📦</div><div class="pack-name">Heavyweight</div><div class="pack-price">FREE</div></div>
+      </div>
+      <div id="packResult" class="pack-popup"></div>
+    </div>
+
+    <!-- COLLECTION -->
+    <div id="tab-collection" class="page">
+      <div class="section-title">MY <span>COLLECTION</span></div>
+      <div class="section-sub">All your fighters – sell duplicates for coins</div>
+      <div id="collectionList"></div>
+    </div>
+
+    <!-- SHOP -->
+    <div id="tab-shop" class="page">
+      <div class="section-title">COIN <span>SHOP</span></div>
+      <div class="section-sub">Spend coins on guaranteed high-rated fighters</div>
+      <div class="shop-grid">
+        <div class="shop-item" onclick="buyPack(4)">
+          <div class="shop-item-icon">⭐⭐⭐⭐</div>
+          <div class="shop-item-name">4-Star Pack</div>
+          <div class="shop-item-price">500 🪙</div>
+        </div>
+        <div class="shop-item" onclick="buyPack(5)">
+          <div class="shop-item-icon">🌟🌟🌟🌟🌟</div>
+          <div class="shop-item-name">5-Star Pack</div>
+          <div class="shop-item-price">1,000 🪙</div>
+        </div>
+        <div class="shop-item" style="border-color:rgba(245,166,35,0.3)" onclick="buyPrime()">
+          <div class="shop-item-icon">🔥</div>
+          <div class="shop-item-name">PRIME Pack</div>
+          <div class="shop-item-price">2,500 🪙</div>
+        </div>
+      </div>
+      <div id="shopResult" class="pack-popup" style="margin-top:20px"></div>
+    </div>
+
+    <!-- LOG -->
+    <div id="tab-log" class="page">
+      <div class="section-title">FIGHT <span>HISTORY</span></div>
+      <div class="section-sub">Your recent fight results</div>
+      <div id="fightLog"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /gamePage -->
+
+<!-- Pack Opening Overlay -->
+<div id="packOverlay">
+  <!-- Phase 1: shaking pack -->
+  <div id="packPhase1">
+    <div class="big-pack-icon">📦</div>
+    <div class="opening-label">OPENING PACK...</div>
+  </div>
+
+  <!-- Phase 2: scratch card -->
+  <div id="packPhase2">
+    <div class="scratch-label">✦ SCRATCH TO REVEAL ✦</div>
+    <div class="scratch-wrap" id="scratchWrap">
+      <div class="scratch-under" id="scratchUnder">
+        <div id="scratchStars"></div>
+        <div id="scratchName"></div>
+        <div id="scratchWeight"></div>
+        <div id="scratchPrime">🔥 PRIME CARD</div>
+      </div>
+      <canvas id="scratchCanvas" width="300" height="300"></canvas>
+    </div>
+    <div class="scratch-hint" id="scratchHint">scratch with your finger or mouse</div>
+  </div>
+
+  <!-- Phase 3: full reveal -->
+  <div id="packPhase3">
+    <div class="final-card" id="finalCard">
+      <div id="finalStars"></div>
+      <div id="finalName"></div>
+      <div id="finalWeight"></div>
+      <div id="finalPrime">🔥 PRIME CARD</div>
+      <button class="final-close-btn" id="finalCloseBtn" onclick="closePackOverlay()">LET'S GO! 🔥</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const fighterData = [
+  ["Aljamain Sterling","Bantamweight",6,true],
+  ["Petr Yan","Bantamweight",5,true],
+  ["Sean O'Malley","Bantamweight",5,true],
+  ["Merab Dvalishvili","Bantamweight",5,false],
+  ["Cory Sandhagen","Bantamweight",4,false],
+  ["Rob Font","Bantamweight",4,false],
+  ["Song Yadong","Bantamweight",4,false],
+  ["Jose Aldo","Bantamweight",4,true],
+  ["TJ Dillashaw","Bantamweight",4,true],
+  ["Dominick Cruz","Bantamweight",4,true],
+  ["Marlon Moraes","Bantamweight",3,true],
+  ["Pedro Munhoz","Bantamweight",3,false],
+  ["Cody Garbrandt","Bantamweight",3,false],
+  ["John Dodson","Bantamweight",3,false],
+  ["Kai Kara-France","Bantamweight",3,false],
+  ["Victor Henry","Bantamweight",3,false],
+  ["Song Kenan","Bantamweight",2,false],
+  ["Marlon Vera","Bantamweight",2,false],
+  ["Brian Kelleher","Bantamweight",2,false],
+  ["Darren Elkins","Bantamweight",2,false],
+  ["Alexander Volkanovski","Featherweight",6,true],
+  ["Ilia Topuria","Featherweight",5,true],
+  ["Yair Rodriguez","Featherweight",5,true],
+  ["Max Holloway","Featherweight",5,true],
+  ["Arnold Allen","Featherweight",4,false],
+  ["Calvin Kattar","Featherweight",4,false],
+  ["Josh Emmett","Featherweight",4,false],
+  ["Chan Sung Jung","Featherweight",4,true],
+  ["Brian Ortega","Featherweight",4,true],
+  ["Dan Ige","Featherweight",3,false],
+  ["Movsar Evloev","Featherweight",3,false],
+  ["Giga Chikadze","Featherweight",3,false],
+  ["Cub Swanson","Featherweight",3,true],
+  ["Youssef Zalal","Featherweight",2,false],
+  ["Lucas Almeida","Featherweight",2,false],
+  ["Islam Makhachev","Lightweight",6,true],
+  ["Charles Oliveira","Lightweight",5,true],
+  ["Dustin Poirier","Lightweight",5,true],
+  ["Justin Gaethje","Lightweight",5,false],
+  ["Beneil Dariush","Lightweight",4,false],
+  ["Arman Tsarukyan","Lightweight",4,false],
+  ["Mateusz Gamrot","Lightweight",4,false],
+  ["Michael Chandler","Lightweight",4,false],
+  ["Dan Hooker","Lightweight",3,false],
+  ["Rafael Fiziev","Lightweight",3,false],
+  ["Thiago Moises","Lightweight",3,false],
+  ["Drakkar Klose","Lightweight",2,false],
+  ["Nasrat Haqparast","Lightweight",2,false],
+  ["Kamaru Usman","Welterweight",6,true],
+  ["Colby Covington","Welterweight",5,false],
+  ["Leon Edwards","Welterweight",5,false],
+  ["Belal Muhammad","Welterweight",5,false],
+  ["Joaquin Buckley","Welterweight",4,false],
+  ["Jack Della Maddalena","Welterweight",4,false],
+  ["Vicente Luque","Welterweight",4,false],
+  ["Geoff Neal","Welterweight",4,false],
+  ["Sean Brady","Welterweight",4,false],
+  ["Shavkat Rakhmonov","Welterweight",3,false],
+  ["Khamzat Chimaev","Welterweight",3,false],
+  ["Stephen Thompson","Welterweight",3,false],
+  ["Michel Pereira","Welterweight",3,false],
+  ["Daniel Rodriguez","Welterweight",2,false],
+  ["Niko Price","Welterweight",2,false],
+  ["Israel Adesanya","Middleweight",6,true],
+  ["Dricus Du Plessis","Middleweight",5,false],
+  ["Nassourdine Imavov","Middleweight",5,false],
+  ["Sean Strickland","Middleweight",5,false],
+  ["Robert Whittaker","Middleweight",4,true],
+  ["Brendan Allen","Middleweight",4,false],
+  ["Caio Borralho","Middleweight",4,false],
+  ["Anthony Hernandez","Middleweight",4,false],
+  ["Jack Hermansson","Middleweight",3,false],
+  ["Paulo Costa","Middleweight",3,false],
+  ["Jared Cannonier","Middleweight",3,false],
+  ["Marvin Vettori","Middleweight",3,false],
+  ["Alex Pereira","Middleweight",2,false],
+  ["Edmen Shahbazyan","Middleweight",2,false],
+  ["Tom Aspinall","Heavyweight",6,true],
+  ["Ciryl Gane","Heavyweight",5,false],
+  ["Alexander Volkov","Heavyweight",5,false],
+  ["Sergei Pavlovich","Heavyweight",5,false],
+  ["Curtis Blaydes","Heavyweight",5,false],
+  ["Jailton Almeida","Heavyweight",4,false],
+  ["Tai Tuivasa","Heavyweight",4,false],
+  ["Derrick Lewis","Heavyweight",4,false],
+  ["Stipe Miocic","Heavyweight",4,true],
+  ["Brock Lesnar","Heavyweight",4,true],
+  ["Fedor Emelianenko","Heavyweight",4,true],
+  ["Cain Velasquez","Heavyweight",3,true],
+  ["Junior Dos Santos","Heavyweight",3,false],
+  ["Ante Delija","Heavyweight",3,false],
+  ["Chris Daukaus","Heavyweight",3,false],
+  ["Tanner Boser","Heavyweight",2,false],
+  ["Greg Hardy","Heavyweight",2,false],
+  ["Andrei Arlovski","Heavyweight",2,true],
+  // Extra Bantamweight
+  ["Merab Dvalishvili","Bantamweight",6,false],
+  ["Henry Cejudo","Bantamweight",5,true],
+  ["Urijah Faber","Bantamweight",4,true],
+  ["Raphael Assuncao","Bantamweight",3,true],
+  ["Jimmie Rivera","Bantamweight",3,false],
+  // Extra Featherweight
+  ["Zabit Magomedsharipov","Featherweight",4,false],
+  ["Brendan Allen","Featherweight",3,false],
+  ["Billy Quarantillo","Featherweight",3,false],
+  ["Sodiq Yusuff","Featherweight",3,false],
+  ["Conor McGregor","Featherweight",5,true],
+  // Extra Lightweight
+  ["Tony Ferguson","Lightweight",5,true],
+  ["Khabib Nurmagomedov","Lightweight",6,true],
+  ["Eddie Alvarez","Lightweight",4,true],
+  ["Nate Diaz","Lightweight",4,true],
+  ["Diego Sanchez","Lightweight",3,true],
+  ["Paul Felder","Lightweight",3,false],
+  // Extra Welterweight
+  ["Jorge Masvidal","Welterweight",5,true],
+  ["Tyron Woodley","Welterweight",4,true],
+  ["Matt Hughes","Welterweight",4,true],
+  ["Robbie Lawler","Welterweight",4,true],
+  ["Carlos Condit","Welterweight",3,true],
+  ["Nick Diaz","Welterweight",3,true],
+  // Extra Middleweight
+  ["Anderson Silva","Middleweight",6,true],
+  ["Luke Rockhold","Middleweight",4,true],
+  ["Chris Weidman","Middleweight",4,true],
+  ["Gegard Mousasi","Middleweight",4,true],
+  ["Yoel Romero","Middleweight",4,true],
+  ["Derek Brunson","Middleweight",3,false],
+  // Extra Heavyweight
+  ["Francis Ngannou","Heavyweight",5,true],
+  ["Junior Dos Santos","Heavyweight",4,true],
+  ["Alistair Overeem","Heavyweight",4,true],
+  ["Mark Hunt","Heavyweight",3,true],
+  ["Stefan Struve","Heavyweight",3,false],
+];
+
+const weights = ["Bantamweight","Featherweight","Lightweight","Welterweight","Middleweight","Heavyweight"];
+const fighters = fighterData.map(f => ({name:f[0], weight:f[1], stars:f[2], prime:f[3]}));
+const fightersByWeight = {};
+weights.forEach(w => { fightersByWeight[w] = fighters.filter(f => f.weight === w); });
+const methods = ["KO","TKO","Submission","Decision"];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let users = JSON.parse(localStorage.getItem("ufcUsers2") || "{}");
+let user = null, myCollection = [], coins = 0, fightHistory = [];
+let userTeam = {}, botTeam = {};
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function stars(n) { return '★'.repeat(n) + '☆'.repeat(6-n); }
+function randMethod() { return methods[Math.floor(Math.random() * methods.length)]; }
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('[id^="tab-"]').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (id === 'draft') populateDraft();
+  if (id === 'fight') populateFightDropdowns();
+  if (id === 'collection') updateCollection();
+  if (id === 'log') renderLog();
+  if (id === 'home') updateHomeStats();
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function saveUser() {
+  if (user && user.username !== "Guest") {
+    users[user.username] = { coins, collection: myCollection, fightHistory };
+    localStorage.setItem("ufcUsers2", JSON.stringify(users));
+  }
+}
+
+function login() {
+  const nm = document.getElementById('username').value.trim();
+  const pw = document.getElementById('password').value.trim();
+  if (!nm) { document.getElementById('loginMsg').textContent = "Enter username."; return; }
+  if (!users[nm]) { document.getElementById('loginMsg').textContent = "User not found. Register first."; return; }
+  user = { username: nm };
+  const u = users[nm];
+  coins = u.coins; myCollection = u.collection; fightHistory = u.fightHistory;
+  startGame();
+}
+
+function register() {
+  const nm = document.getElementById('username').value.trim();
+  if (!nm) { document.getElementById('loginMsg').textContent = "Enter username."; return; }
+  if (users[nm]) { document.getElementById('loginMsg').textContent = "Username taken!"; return; }
+  user = { username: nm }; coins = 1000; myCollection = []; fightHistory = [];
+  saveUser(); startGame();
+}
+
+function guestPlay() {
+  user = { username: "Guest" }; coins = 500; myCollection = []; fightHistory = [];
+  startGame();
+}
+
+function logout() { saveUser(); user = null; showPage('loginPage'); }
+
+function startGame() {
+  document.getElementById('topbarUser').textContent = user.username;
+  showPage('gamePage');
+  window.scrollTo({top: 0, behavior: 'instant'});
+  updateCoins();
+  updateHomeStats();
+  populateDraft();
+  populateFightDropdowns();
+  renderLog();
+}
+
+// ── COINS & UI ────────────────────────────────────────────────────────────────
+function updateCoins() {
+  document.getElementById('coins').textContent = coins.toLocaleString();
+  document.getElementById('statCoins2').textContent = coins.toLocaleString();
+}
+
+function updateHomeStats() {
+  document.getElementById('statCards').textContent = myCollection.length;
+  document.getElementById('statPrime').textContent = myCollection.filter(f => f.prime).length;
+  document.getElementById('statFights').textContent = fightHistory.length;
+  updateCoins();
+}
+
+// ── COLLECTION ────────────────────────────────────────────────────────────────
+function updateCollection() {
+  const el = document.getElementById('collectionList');
+  if (!myCollection.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>No fighters yet. Open some packs!</p></div>';
+    return;
+  }
+  const sorted = [...myCollection].sort((a,b) => b.stars - a.stars || (b.prime - a.prime));
+  el.innerHTML = sorted.map((f,i) => {
+    const sellVal = f.prime ? 500 : f.stars===6?400:f.stars===5?250:f.stars===4?150:f.stars===3?100:50;
+    return `<div class="fighter-card ${f.prime?'prime':''}">
+      <div class="fighter-info-left">
+        <div class="fighter-name">${f.name}</div>
+        <div class="fighter-meta">${f.weight}</div>
+      </div>
+      <div class="fighter-right">
+        <span class="stars">${'★'.repeat(f.stars)}</span>
+        ${f.prime ? '<span class="prime-badge">Prime</span>' : ''}
+        <button class="sell-btn" onclick="sellFighter(${myCollection.indexOf(f)})">Sell +${sellVal}🪙</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function sellFighter(i) {
+  const f = myCollection.splice(i, 1)[0];
+  const val = f.prime?500:f.stars===6?400:f.stars===5?250:f.stars===4?150:f.stars===3?100:50;
+  coins += val;
+  toast(`Sold ${f.name} for +${val} 🪙`, 'green');
+  updateCollection(); updateHomeStats(); saveUser();
+}
+
+// ── DRAFT ─────────────────────────────────────────────────────────────────────
+function populateDraft() {
+  userTeam = {}; botTeam = {};
+  document.getElementById('fightButton').style.display = 'none';
+  document.getElementById('draftResult').innerHTML = '';
+  const container = document.getElementById('draftContainer');
+  container.innerHTML = '';
+
+  weights.forEach(w => {
+    const card = document.createElement('div');
+    card.className = 'draft-card';
+    card.id = 'draft-' + w;
+    card.innerHTML = `<div class="draft-weight-label">${w}</div><div style="color:#aaa;font-size:0.85rem;margin-top:4px">👆 Click to pick</div>`;
+    card.addEventListener('click', () => {
+      if (card.classList.contains('picked')) return;
+      const opts = [...fightersByWeight[w]].sort(() => 0.5 - Math.random()).slice(0, 3);
+      const optHtml = opts.map(f => `
+        <div class="draft-option">
+          <div>
+            <b>${f.name}</b>
+            <span style="color:var(--gold);margin-left:6px">${'★'.repeat(f.stars)}</span>
+            ${f.prime ? '<span class="prime-badge" style="margin-left:4px">Prime</span>' : ''}
+          </div>
+          <button class="pick-btn" onclick="pickFighter('${w}','${f.name}')">Pick</button>
+        </div>`).join('');
+      card.innerHTML = `<div class="draft-weight-label">${w}</div><div class="draft-options">${optHtml}</div>`;
+    });
+    container.appendChild(card);
+  });
+}
+
+function pickFighter(w, name) {
+  const f = fighters.find(x => x.name === name && x.weight === w);
+  userTeam[w] = f;
+  botTeam[w] = rand(fightersByWeight[w]);
+  const card = document.getElementById('draft-' + w);
+  card.classList.add('picked');
+  card.innerHTML = `<div class="draft-weight-label">${w}</div>
+    <div style="font-weight:700">${f.name}</div>
+    <div style="color:var(--gold)">${'★'.repeat(f.stars)} ${f.prime?'<span class="prime-badge">Prime</span>':''}</div>`;
+  if (Object.keys(userTeam).length === weights.length) {
+    document.getElementById('fightButton').style.display = 'block';
+  }
+}
+
+function runDraftFight() {
+  let up = 0, bp = 0;
+  let rows = weights.map(w => {
+    const u = userTeam[w], b = botTeam[w];
+    const userWins = Math.random() < (0.4 + u.stars * 0.06);
+    if (userWins) up++; else bp++;
+    const winner = userWins ? `<span style="color:#22c55e">✅ You</span>` : `<span style="color:var(--red)">❌ Bot</span>`;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--card-border)">
+      <span style="font-size:0.85rem"><b>${w}</b>: ${u.name} vs ${b.name}</span>
+      <span style="font-size:0.85rem">${winner} (${randMethod()})</span>
+    </div>`;
+  }).join('');
+
+  const totalWinner = up > bp ? '🏆 YOU WIN!' : '💀 BOT WINS';
+  const color = up > bp ? '#22c55e' : 'var(--red)';
+  const html = `<div class="fight-result-box" style="margin-top:20px">
+    ${rows}
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+      <div style="font-size:1.3rem;font-weight:900">You ${up} – Bot ${bp}</div>
+      <div class="winner" style="color:${color}">${totalWinner}</div>
+    </div>
+  </div>`;
+
+  document.getElementById('draftResult').innerHTML = html;
+  const coinReward = up > bp ? 200 : 50;
+  coins += coinReward;
+  const entry = `Draft – You ${up}-${bp} Bot → ${up>bp?'WIN':'LOSS'} (+${coinReward}🪙)`;
+  fightHistory.unshift(entry);
+  toast(up > bp ? `Victory! +${coinReward}🪙` : `Defeated. +${coinReward}🪙`, up > bp ? 'gold' : 'red');
+  updateHomeStats(); saveUser();
+}
+
+// ── FIGHT ─────────────────────────────────────────────────────────────────────
+function populateFightDropdowns() {
+  const mode = document.getElementById('fightMode').value;
+  const pool = mode === "collection" ? myCollection : fighters;
+  const f1 = document.getElementById('fighter1'), f2 = document.getElementById('fighter2');
+  f1.innerHTML = f2.innerHTML = '';
+  if (!pool.length) {
+    f1.innerHTML = f2.innerHTML = '<option>No fighters available</option>';
+    return;
+  }
+  const sorted = [...pool].sort((a,b) => b.stars - a.stars);
+  sorted.forEach(f => {
+    const opt = `<option value="${f.name}">${f.name} (${f.weight}) ${'★'.repeat(f.stars)}</option>`;
+    f1.innerHTML += opt; f2.innerHTML += opt;
+  });
+  if (sorted.length > 1) f2.selectedIndex = 1;
+}
+
+function simulateFight() {
+  const n1 = document.getElementById('fighter1').value;
+  const n2 = document.getElementById('fighter2').value;
+  if (n1 === n2) { toast('Pick two different fighters!', 'red'); return; }
+  const pool = [...fighters, ...myCollection];
+  const f1 = pool.find(f => f.name === n1);
+  const f2 = pool.find(f => f.name === n2);
+  if (!f1 || !f2) return;
+  if (f1.weight !== f2.weight) { toast('Same weight class only!', 'red'); return; }
+
+  const f1Score = f1.stars * (1 + Math.random() * 0.5) * (f1.prime ? 1.2 : 1);
+  const f2Score = f2.stars * (1 + Math.random() * 0.5) * (f2.prime ? 1.2 : 1);
+  const winner = f1Score > f2Score ? f1 : f2;
+  const method = randMethod();
+
+  const html = `<div class="fight-result-box" style="margin-top:20px">
+    <div style="font-size:0.85rem;color:var(--sub);margin-bottom:8px">${f1.weight} • ${method}</div>
+    <div class="winner">${winner.name}</div>
+    <div style="color:var(--sub);margin-top:6px;font-size:0.9rem">${f1.name} vs ${f2.name}</div>
+  </div>`;
+
+  document.getElementById('fightResult').innerHTML = html;
+  const entry = `${f1.name} vs ${f2.name} → ${winner.name} (${method})`;
+  fightHistory.unshift(entry);
+  coins += 25;
+  toast(`Fight done! +25🪙`, 'green');
+  updateHomeStats(); saveUser();
+}
+
+// ── PACKS ─────────────────────────────────────────────────────────────────────
+// ── PACK OPENING ──────────────────────────────────────────────────────────────
+let scratchRevealed = false;
+
+function showPackResult(f) {
+  const overlay  = document.getElementById('packOverlay');
+  const phase1   = document.getElementById('packPhase1');
+  const phase2   = document.getElementById('packPhase2');
+  const phase3   = document.getElementById('packPhase3');
+
+  // Reset phases
+  phase1.style.display = 'flex';
+  phase2.style.display = 'none';
+  phase3.style.display = 'none';
+  scratchRevealed = false;
+  overlay.classList.add('show');
+
+  // Set scratch card content
+  const isPrime = f.prime;
+  document.getElementById('scratchStars').textContent = '★'.repeat(f.stars) + '☆'.repeat(6 - f.stars);
+  document.getElementById('scratchName').textContent = f.name;
+  document.getElementById('scratchName').style.color = isPrime ? 'var(--gold)' : '#fff';
+  document.getElementById('scratchWeight').textContent = f.weight;
+  document.getElementById('scratchPrime').style.display = isPrime ? 'block' : 'none';
+  document.getElementById('scratchUnder').className = 'scratch-under' + (isPrime ? ' prime-under' : '');
+  document.getElementById('scratchWrap').className = 'scratch-wrap' + (isPrime ? ' prime-wrap' : '');
+
+  // Set final card content
+  document.getElementById('finalStars').textContent = '★'.repeat(f.stars) + '☆'.repeat(6 - f.stars);
+  document.getElementById('finalName').textContent = f.name;
+  document.getElementById('finalName').style.color = isPrime ? 'var(--gold)' : '#fff';
+  document.getElementById('finalWeight').textContent = f.weight;
+  document.getElementById('finalPrime').style.display = isPrime ? 'inline-block' : 'none';
+  document.getElementById('finalCard').className = 'final-card' + (isPrime ? ' prime-final' : '');
+  document.getElementById('finalCloseBtn').className = 'final-close-btn' + (isPrime ? ' prime-btn' : '');
+
+  // Phase 1 → Phase 2 after 1.2s
+  setTimeout(() => {
+    phase1.style.display = 'none';
+    phase2.style.display = 'flex';
+    initScratch(f);
+  }, 1200);
+}
+
+function initScratch(f) {
+  const canvas = document.getElementById('scratchCanvas');
+  const ctx = canvas.getContext('2d');
+  const isPrime = f.prime;
+
+  // Draw scratchable layer
+  ctx.clearRect(0, 0, 300, 300);
+  const grad = ctx.createLinearGradient(0, 0, 300, 300);
+  if (isPrime) {
+    grad.addColorStop(0, '#3a2800');
+    grad.addColorStop(1, '#5a3f00');
+  } else {
+    grad.addColorStop(0, '#1a0a0a');
+    grad.addColorStop(1, '#2a1010');
+  }
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, 300, 300, 24);
+  ctx.fill();
+
+  // Scratch texture dots
+  ctx.fillStyle = isPrime ? 'rgba(245,166,35,0.08)' : 'rgba(229,9,20,0.08)';
+  for (let i = 0; i < 300; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*300, Math.random()*300, Math.random()*3+1, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // Label
+  ctx.fillStyle = isPrime ? '#f5a623' : '#e50914';
+  ctx.font = 'bold 18px Barlow, Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('✦ SCRATCH HERE ✦', 150, 145);
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.font = '13px Barlow, Arial';
+  ctx.fillText('drag to reveal your fighter', 150, 170);
+
+  // Scratch logic
+  let scratching = false;
+  let totalScratched = 0;
+
+  function getPos(e) {
+    const r = canvas.getBoundingClientRect();
+    if (e.touches) return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top };
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+
+  function scratch(e) {
+    if (!scratching) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 28, 0, Math.PI*2);
+    ctx.fill();
+    totalScratched++;
+    if (totalScratched > 15 && !scratchRevealed) checkReveal(ctx, f);
+  }
+
+  canvas.addEventListener('mousedown',  e => { scratching = true; scratch(e); });
+  canvas.addEventListener('mousemove',  scratch);
+  canvas.addEventListener('mouseup',    () => scratching = false);
+  canvas.addEventListener('touchstart', e => { scratching = true; scratch(e); }, { passive: false });
+  canvas.addEventListener('touchmove',  scratch, { passive: false });
+  canvas.addEventListener('touchend',   () => scratching = false);
+}
+
+function checkReveal(ctx, f) {
+  const data = ctx.getImageData(0, 0, 300, 300).data;
+  let transparent = 0;
+  for (let i = 3; i < data.length; i += 4) if (data[i] < 128) transparent++;
+  const pct = transparent / (data.length / 4);
+  if (pct > 0.45) triggerFullReveal(f);
+}
+
+function triggerFullReveal(f) {
+  if (scratchRevealed) return;
+  scratchRevealed = true;
+  document.getElementById('scratchHint').textContent = '';
+  setTimeout(() => {
+    document.getElementById('packPhase2').style.display = 'none';
+    document.getElementById('packPhase3').style.display = 'flex';
+    toast(`Pulled: ${f.name} ${'★'.repeat(f.stars)}`, f.stars >= 5 || f.prime ? 'gold' : '');
+  }, 400);
+}
+
+function closePackOverlay() {
+  document.getElementById('packOverlay').classList.remove('show');
+}
+
+function openPack(weight) {
+  const f = rand(fightersByWeight[weight]);
+  myCollection.push(f);
+  showPackResult(f);
+  updateHomeStats(); saveUser();
+}
+
+function buyPack(st) {
+  const cost = st === 4 ? 500 : 1000;
+  if (coins < cost) { toast('Not enough coins!', 'red'); return; }
+  coins -= cost;
+  const pool = fighters.filter(f => f.stars >= st);
+  const f = rand(pool);
+  myCollection.push(f);
+  showPackResult(f);
+  updateHomeStats(); saveUser();
+}
+
+function buyPrime() {
+  if (coins < 2500) { toast('Not enough coins!', 'red'); return; }
+  coins -= 2500;
+  const pool = fighters.filter(f => f.prime);
+  const f = rand(pool);
+  myCollection.push(f);
+  showPackResult(f);
+  updateHomeStats(); saveUser();
+}
+
+// ── LOG ───────────────────────────────────────────────────────────────────────
+function renderLog() {
+  const el = document.getElementById('fightLog');
+  if (!fightHistory.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📜</div><p>No fights yet!</p></div>';
+    return;
+  }
+  el.innerHTML = fightHistory.slice(0,20).map(e => `<div class="log-entry">${e}</div>`).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.getElementById('loginMsg').textContent = '';
+</script>
+</body>
+</html>
