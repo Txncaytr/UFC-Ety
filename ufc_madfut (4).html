@@ -1,0 +1,867 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>UFC MadFut</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700;900&display=swap" rel="stylesheet"><style>:root{--red:#e50914;--gold:#f5a623;--dark:#0a0a0f;--card-bg:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--text:#f0f0f0;--sub:#888;--green:#22c55e;--blue:#3b82f6;--purple:#a855f7}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 20%,rgba(229,9,20,.12) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(245,166,35,.06) 0%,transparent 50%);pointer-events:none;z-index:0}.page{display:none;position:relative;z-index:1}.page.active{display:block}#loginPage{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px}#loginPage.active{display:flex}.logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,10vw,6rem);letter-spacing:4px;line-height:1;margin-bottom:6px}.logo span{color:var(--red)}.logo-sub{font-size:.75rem;font-weight:700;letter-spacing:8px;color:var(--gold);text-transform:uppercase;margin-bottom:50px}.login-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;padding:36px;width:100%;max-width:380px;backdrop-filter:blur(10px)}.login-box h2{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;margin-bottom:24px;color:var(--gold)}.inp-group{margin-bottom:14px}.inp-group label{display:block;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:6px}.inp-group input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:white;font-family:'Barlow',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s}.inp-group input:focus{border-color:var(--red)}#loginMsg{color:var(--red);font-size:.85rem;margin-top:10px;min-height:20px}.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--sub);font-size:.75rem}.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}.btn{padding:11px 18px;border:none;border-radius:8px;font-family:'Barlow',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:1px;cursor:pointer;transition:all .2s;text-transform:uppercase}.btn-r{background:var(--red);color:white}.btn-r:hover{background:#ff1a28;transform:translateY(-1px)}.btn-o{background:transparent;color:white;border:1px solid var(--border)}.btn-o:hover{border-color:white}.btn-g{background:var(--gold);color:#000}.btn-g:hover{background:#ffb84d}.btn-gh{background:rgba(255,255,255,.05);color:var(--sub);border:1px solid var(--border)}.btn-gh:hover{color:white;background:rgba(255,255,255,.1)}.btn-gr{background:#22c55e;color:#000}.btn-gr:hover{background:#16a34a}.btn-bl{background:rgba(59,130,246,.2);border:1px solid rgba(59,130,246,.4);color:var(--blue)}.btn-bl:hover{background:rgba(59,130,246,.35)}.btn-pu{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.4);color:var(--purple)}.btn-row{display:flex;gap:10px;margin-top:20px}#gamePage{height:100vh;display:flex;flex-direction:column;overflow:hidden}#gamePage.active{display:flex}.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(0,0,0,.7);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);z-index:200;flex-shrink:0}.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px}.topbar-logo span{color:var(--red)}.coins-badge{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:5px 12px;font-weight:700;font-size:.85rem;color:var(--gold)}.topbar-right{display:flex;align-items:center;gap:8px}.elo-pill{font-size:.72rem;font-weight:700;color:var(--gold);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:3px 8px}.notif-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;position:relative}.notif-dot{position:absolute;top:0;right:0;width:8px;height:8px;background:var(--red);border-radius:50%}.page-nav{display:flex;background:rgba(0,0,0,.8);border-top:1px solid var(--border);flex-shrink:0;position:sticky;bottom:0;z-index:200}.page-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;border:none;background:transparent;color:var(--sub);cursor:pointer;transition:all .2s;gap:3px;min-width:0}.page-nav-btn .pnb-icon{font-size:1.2rem;transition:transform .2s}.page-nav-btn .pnb-label{font-size:.55rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}.page-nav-btn.active{color:var(--red)}.page-nav-btn.active .pnb-icon{transform:scale(1.15)}.inner-tabs{display:flex;gap:0;background:rgba(0,0,0,.4);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto}.inner-tab{padding:10px 16px;border:none;background:transparent;color:var(--sub);font-family:'Barlow',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap;border-bottom:2px solid transparent}.inner-tab:hover{color:white}.inner-tab.active{color:white;border-bottom-color:var(--red)}.content{flex:1;overflow-y:auto;padding:16px;max-width:960px;margin:0 auto;width:100%}.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:4px}.sec-title span{color:var(--red)}.sec-sub{color:var(--sub);font-size:.82rem;margin-bottom:16px}.card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;transition:all .2s}.card:hover{border-color:rgba(255,255,255,.15)}.fighter-card{display:flex;align-items:center;justify-content:space-between;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;transition:all .2s}.fighter-card:hover{border-color:rgba(255,255,255,.15)}.fighter-card.prime{border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.04)}.f-name{font-weight:700;font-size:.92rem}.f-meta{font-size:.72rem;color:var(--sub);margin-top:2px}.prime-badge{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);border-radius:4px;padding:2px 6px;font-size:.62rem;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase}.lvl-badge{background:rgba(229,9,20,.2);border:1px solid rgba(229,9,20,.4);border-radius:4px;padding:2px 6px;font-size:.62rem;font-weight:700;color:var(--red)}.sell-btn{background:rgba(229,9,20,.15);border:1px solid rgba(229,9,20,.2);color:var(--red);border-radius:6px;padding:5px 9px;font-family:'Barlow',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s}.sell-btn:hover{background:rgba(229,9,20,.3)}.stat-bars{display:flex;flex-direction:column;gap:4px;margin-top:8px}.stat-row{display:flex;align-items:center;gap:8px;font-size:.67rem}.stat-lbl{width:26px;color:var(--sub);letter-spacing:1px;flex-shrink:0}.stat-val{width:22px;text-align:right;font-weight:700;font-size:.68rem;flex-shrink:0}.stat-track{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}.stat-fill{height:100%;border-radius:3px;transition:width .4s}.fight-result-box{background:rgba(229,9,20,.06);border:1px solid rgba(229,9,20,.2);border-radius:12px;padding:16px;margin-top:12px}.packs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}.pack-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}.pack-card:hover{border-color:var(--red);transform:translateY(-2px)}.home-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.stat-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);line-height:1}.stat-lbl2{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-top:3px}#packOverlay{position:fixed;inset:0;z-index:9999;background:#05050d;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}#packOverlay.show{display:flex}#packPhase1{display:flex;flex-direction:column;align-items:center;justify-content:center}.big-pack-icon{font-size:8rem;animation:packShake .35s infinite;filter:drop-shadow(0 0 50px rgba(229,9,20,.7));user-select:none}@keyframes packShake{0%{transform:rotate(-7deg) scale(1)}50%{transform:rotate(7deg) scale(1.1)}100%{transform:rotate(-7deg) scale(1)}}.opening-label{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:8px;color:var(--sub);margin-top:24px;animation:blink .7s infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}#packPhase2{display:none;flex-direction:column;align-items:center;width:100%;max-width:360px}.scratch-label{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:6px;color:var(--sub);margin-bottom:16px;animation:blink 1s infinite}.scratch-wrap{position:relative;width:280px;height:280px;border-radius:20px;overflow:hidden;cursor:crosshair;box-shadow:0 0 60px rgba(229,9,20,.3)}.scratch-wrap.prime-wrap{box-shadow:0 0 60px rgba(245,166,35,.4)}.scratch-under{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#12122a,#1e1e3f);z-index:1;padding:20px}.scratch-under.prime-under{background:linear-gradient(135deg,#1c1400,#2e2000)}#scratchCanvas{position:absolute;inset:0;z-index:2;border-radius:20px;cursor:crosshair}#packPhase3{display:none;flex-direction:column;align-items:center;width:100%;max-width:360px}.final-card{background:linear-gradient(135deg,#12122a,#1e1e3f);border-radius:20px;padding:36px;text-align:center;position:relative;overflow:hidden;animation:revealPop .5s cubic-bezier(.34,1.56,.64,1);width:100%;border:1px solid rgba(229,9,20,.3)}.final-card.prime-final{background:linear-gradient(135deg,#1c1400,#2e2000);border-color:rgba(245,166,35,.4)}.final-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(229,9,20,.1),transparent 70%);pointer-events:none}.final-card.prime-final::after{background:radial-gradient(ellipse at 50% 30%,rgba(245,166,35,.15),transparent 70%)}@keyframes revealPop{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.04);opacity:1}100%{transform:scale(1)}}.final-close-btn{margin-top:20px;padding:12px 36px;background:var(--red);color:white;border:none;border-radius:10px;font-family:'Barlow',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:2px;cursor:pointer;transition:all .2s;text-transform:uppercase;position:relative;z-index:1}.final-close-btn:hover{background:#ff1a28;transform:scale(1.04)}.final-close-btn.prime-btn{background:var(--gold);color:#000}.weight-classes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:16px}.draft-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;min-height:74px}.draft-card:hover:not(.picked){border-color:var(--red);background:rgba(229,9,20,.06)}.draft-card.picked{border-color:rgba(229,9,20,.5);background:rgba(229,9,20,.08);cursor:default}.pick-btn{background:var(--red);color:white;border:none;border-radius:5px;padding:4px 9px;font-family:'Barlow',sans-serif;font-weight:700;font-size:.72rem;cursor:pointer}.pick-btn:hover{background:#ff1a28}.log-entry{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;font-size:.82rem;line-height:1.7}.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.shop-item{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:20px 16px;text-align:center;cursor:pointer;transition:all .2s}.shop-item:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.2)}.market-listing{display:flex;align-items:center;justify-content:space-between;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;gap:8px}.rivalry-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}.rivalry-bar-wrap{margin-top:8px;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;display:flex}.ach-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:14px}.ach-card.unlocked{border-color:rgba(245,166,35,.4);background:rgba(245,166,35,.04)}.ach-icon{font-size:2.2rem;flex-shrink:0}.ach-badge{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:2px 8px;font-size:.62rem;font-weight:700;color:var(--gold);letter-spacing:1px}.fusion-slots{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:16px}.fusion-slot{background:rgba(255,255,255,.03);border:2px dashed rgba(255,255,255,.15);border-radius:14px;padding:20px 12px;text-align:center;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}.fusion-slot:hover{border-color:var(--purple)}.fusion-slot.filled{border-style:solid;border-color:rgba(168,85,247,.4);background:rgba(168,85,247,.06)}.fusion-plus{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--sub)}.powerup-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px}.powerup-active{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04)}.bank-tier{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}.interest-bar{height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-top:8px}.interest-fill{height:100%;background:var(--green);border-radius:3px;transition:width .4s}.news-item{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}.news-time{font-size:.65rem;color:var(--sub);letter-spacing:2px;margin-bottom:4px}.news-title{font-weight:700;font-size:.88rem;margin-bottom:2px}.news-body{font-size:.78rem;color:var(--sub)}.event-card{background:linear-gradient(135deg,rgba(229,9,20,.08),rgba(245,166,35,.04));border:1px solid rgba(229,9,20,.2);border-radius:14px;padding:18px;margin-bottom:10px}.event-timer{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:3px}#reactionCircle{width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:16px auto;cursor:pointer;transition:all .15s;user-select:none;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;border:3px solid rgba(229,9,20,.3);background:rgba(229,9,20,.1);color:var(--sub)}#reactionCircle.ready{background:rgba(34,197,94,.2);border-color:#22c55e;color:#22c55e;animation:pulse .6s infinite}#reactionCircle.hit{background:rgba(245,166,35,.3);border-color:var(--gold);color:var(--gold)}#reactionCircle.early{background:rgba(229,9,20,.3);border-color:var(--red);color:var(--red)}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}#punchBar{height:28px;background:rgba(255,255,255,.06);border-radius:14px;overflow:hidden;position:relative;cursor:pointer;border:1px solid rgba(255,255,255,.1)}#punchBar .zone{position:absolute;top:0;height:100%;background:rgba(34,197,94,.3);transition:left .05s}#punchBar .cursor{position:absolute;top:0;width:4px;height:100%;background:white;border-radius:2px;transition:left .05s linear}#punchBar .sweet{position:absolute;top:0;height:100%;background:rgba(245,166,35,.5);border:1px solid var(--gold)}#notifPanel{position:fixed;top:0;right:-320px;width:300px;height:100vh;background:#0f0f1a;border-left:1px solid var(--border);z-index:5000;transition:right .3s;overflow-y:auto;padding:16px}#notifPanel.open{right:0}.notif-item{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:.8rem}.notif-item.unread{border-color:rgba(229,9,20,.3);background:rgba(229,9,20,.04)}.toast{position:fixed;bottom:80px;right:16px;background:rgba(15,15,26,.97);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:.85rem;z-index:9998;transform:translateY(80px);opacity:0;transition:all .3s;max-width:280px}.toast.show{transform:translateY(0);opacity:1}.toast.gold{border-color:rgba(245,166,35,.4);color:var(--gold)}.toast.green{border-color:rgba(34,197,94,.4);color:#22c55e}.toast.red{border-color:rgba(229,9,20,.4);color:var(--red)}.toast.blue{border-color:rgba(59,130,246,.4);color:var(--blue)}.toast.purple{border-color:rgba(168,85,247,.4);color:var(--purple)}.empty{text-align:center;color:var(--sub);padding:48px 20px}.empty .icon{font-size:2.8rem;margin-bottom:10px}select{width:100%;background:#1c1c2e;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:9px 12px;color:#fff;font-family:'Barlow',sans-serif;font-size:.85rem;outline:none;cursor:pointer}select option{background:#1c1c2e}select:focus{border-color:var(--red)}::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}input[type=text],input[type=password]{outline:none}.sr{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.sr .btn{flex:unset;padding:7px 14px;font-size:.75rem}.tx-sub{font-size:.72rem;color:var(--sub)}.tx-sub2{font-size:.7rem;color:var(--sub)}.tx-h{font-weight:700;font-size:.88rem}.tx-gold{color:var(--gold);font-weight:700}.tc-f1{text-align:center;flex:1}.df-g8{display:flex;align-items:center;gap:8px}.df-g6{display:flex;align-items:center;gap:6px}.df-sb{display:flex;align-items:center;justify-content:space-between}.ls2{letter-spacing:2px}.ls3{letter-spacing:3px}</style></head><body><div id="loginPage" class="page active"><div class="logo">UFC <span>MAD</span>FUT</div><div class="logo-sub">Ultimate Card Game</div><div class="login-box"><h2>Sign In</h2><div class="inp-group"><label>Username</label><input id="username" type="text" placeholder="Enter username"></div><div class="inp-group"><label>Password</label><input id="password" type="password" placeholder="Enter password"></div><div class="btn-row"><button class="btn btn-r" onclick="login()">Login</button><button class="btn btn-o" onclick="register()">Register</button></div><div id="loginMsg"></div><div class="divider">or</div><button class="btn btn-gh" style="width:100%" onclick="guestPlay()">🥊 Play as Guest</button></div></div><div id="gamePage" class="page"><div class="topbar"><div class="topbar-logo">UFC <span>MAD</span>FUT</div><div class="coins-badge">🪙 <span id="coinsDisplay">0</span></div><div class="topbar-right"><div class="elo-pill" id="eloPill">⚫ 1000</div><button class="notif-btn" onclick="toggleNotif()" id="notifBtn">🔔<span class="notif-dot" id="notifDot" style="display:none"></span></button><button class="btn btn-gh" style="padding:5px 10px;font-size:.72rem" onclick="logout()">Exit</button></div></div><div class="inner-tabs" id="innerTabsBar"></div><div class="content" id="mainContent"></div><div class="page-nav"><button class="page-nav-btn active" onclick="switchPage('home',this)"><span class="pnb-icon">🏠</span><span class="pnb-label">Home</span></button><button class="page-nav-btn" onclick="switchPage('fight',this)"><span class="pnb-icon">⚔️</span><span class="pnb-label">Fight</span></button><button class="page-nav-btn" onclick="switchPage('cards',this)"><span class="pnb-icon">🎴</span><span class="pnb-label">Cards</span></button><button class="page-nav-btn" onclick="switchPage('games',this)"><span class="pnb-icon">🎮</span><span class="pnb-label">Mini Games</span></button><button class="page-nav-btn" onclick="switchPage('more',this)"><span class="pnb-icon">⋯</span><span class="pnb-label">More</span></button><button class="page-nav-btn" onclick="switchPage('extra',this)"><span class="pnb-icon">🏆</span><span class="pnb-label">Extra</span></button></div></div><div id="packOverlay"><div id="packPhase1"><div class="big-pack-icon">📦</div><div class="opening-label">ÖFFNE PACK...</div></div><div id="packPhase2" style="display:none;flex-direction:column;align-items:center;width:100%;max-width:360px"><div class="scratch-label">✦ SCRATCH TO REVEAL ✦</div><div class="scratch-wrap" id="scratchWrap"><div class="scratch-under" id="scratchUnder"><div id="scratchStars" style="font-size:1.5rem;color:var(--gold);letter-spacing:3px;margin-bottom:8px"></div><div id="scratchName" style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;line-height:1.1;margin-bottom:4px"></div><div id="scratchWeight" style="font-size:.72rem;letter-spacing:4px;color:var(--sub);text-transform:uppercase"></div><div id="scratchPrime" style="display:none;margin-top:8px;background:linear-gradient(135deg,#f5a623,#e8860f);color:#000;font-weight:900;font-size:.68rem;letter-spacing:3px;padding:3px 12px;border-radius:20px">🔥 PRIME CARD</div></div><canvas id="scratchCanvas" width="280" height="280"></canvas></div><div style="font-size:.72rem;color:var(--sub);margin-top:12px;letter-spacing:2px" id="scratchHint">mit Finger oder Maus kratzen</div><button onclick="triggerFullReveal(window._cpf)" style="margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--sub);border-radius:8px;padding:6px 16px;font-family:Barlow,sans-serif;font-size:.72rem;letter-spacing:2px;cursor:pointer">SKIP →</button></div><div id="packPhase3" style="display:none;flex-direction:column;align-items:center;width:100%;max-width:360px"><div class="final-card" id="finalCard"><div id="finalStars" style="font-size:1.8rem;color:var(--gold);letter-spacing:4px;margin-bottom:12px"></div><div id="finalName" style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:3px;line-height:1;margin-bottom:6px"></div><div id="finalWeight" style="font-size:.72rem;letter-spacing:4px;color:var(--sub);text-transform:uppercase;margin-bottom:12px"></div><div id="finalPrime" style="display:none;background:linear-gradient(135deg,#f5a623,#e8860f);color:#000;font-weight:900;font-size:.72rem;letter-spacing:3px;padding:4px 14px;border-radius:20px;margin-bottom:12px">🔥 PRIME CARD</div><div id="finalStats" style="margin-bottom:4px"></div><button class="final-close-btn" id="finalCloseBtn" onclick="closePackOverlay()">LET'S GO! 🔥</button></div></div></div><div id="notifPanel"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px">BENACHRICHTIGUNGEN</div><button onclick="toggleNotif()" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:1.2rem">✕</button></div><div id="notifList"></div></div><div id="toast" class="toast"></div><script>const _hdr=(a,b,c)=>`<div class="sec-title">${a} <span>${b}</span></div><div class="sec-sub">${c}</div>`;
+const _mt=(i,t)=>`<div class="empty"><div class="icon">${i}</div><p>${t}</p></div>`;
+const _rd=Math.round;
+const _lg=k=>localStorage.getItem(k),_ls=(k,v)=>localStorage.setItem(k,v);
+const _i=parseInt;
+const _r=()=>Math.random(),_f=Math.floor,_m=Math.min,_mx=Math.max;
+const clone=o=>JSON.parse(JSON.stringify(o));
+const $a=s=>document.querySelectorAll(s);
+const $i=id=>document.getElementById(id);
+
+const _W=["Bantamweight","Featherweight","Lightweight","Welterweight","Middleweight","Heavyweight"];
+const _G='color:var(--gold)';
+const _B7='font-weight:700';
+const fighterData = [["Aljamain Sterling",0,6,true,82,95,80,70,78,88],["TJ Dillashaw",0,6,true,88,82,92,78,72,90],["Dominick Cruz",0,6,true,85,75,95,68,80,92],["Sean O'Malley",0,5,false,90,55,88,85,62,78],["Merab Dvalishvili",0,5,false,78,88,90,65,74,98],["Petr Yan",0,5,false,92,78,85,82,76,87],["Cory Sandhagen",0,4,false,88,65,87,78,68,83],["Rob Font",0,4,false,84,60,80,76,70,82],["Song Yadong",0,4,false,85,65,82,80,72,80],["Jose Aldo",0,4,false,88,72,88,80,75,82],["Henry Cejudo",0,4,false,80,93,82,74,78,86],["Marlon Moraes",0,3,false,85,70,84,82,65,78],["Pedro Munhoz",0,3,false,80,75,75,78,80,80],["Cody Garbrandt",0,3,false,88,62,86,85,58,72],["John Dodson",0,3,false,80,68,88,74,65,80],["Kai Kara-France",0,3,false,82,65,84,80,65,78],["Jimmie Rivera",0,3,false,78,75,78,68,74,82],["Song Kenan",0,2,false,74,60,75,70,65,74],["Marlon Vera",0,2,false,76,68,72,74,72,76],["Brian Kelleher",0,2,false,72,65,70,70,65,72],["Darren Elkins",0,2,false,68,70,65,62,78,80],["Alexander Volkanovski",1,6,true,90,88,88,78,84,95],["Conor McGregor",1,6,true,95,72,92,92,60,74],["Chan Sung Jung",1,6,true,88,82,82,84,72,80],["Ilia Topuria",1,5,false,88,85,86,90,74,84],["Max Holloway",1,5,false,92,65,88,80,82,96],["Yair Rodriguez",1,5,false,90,62,90,80,68,82],["Arnold Allen",1,4,false,84,72,82,74,75,86],["Calvin Kattar",1,4,false,86,65,80,78,78,88],["Josh Emmett",1,4,false,82,68,78,88,70,80],["Brian Ortega",1,4,false,78,92,74,72,80,78],["Zabit Magomedsharipov",1,4,false,86,78,88,74,70,82],["Dan Ige",1,3,false,80,68,76,76,72,78],["Movsar Evloev",1,3,false,78,75,78,70,72,80],["Giga Chikadze",1,3,false,88,55,84,78,62,76],["Billy Quarantillo",1,3,false,82,65,80,76,68,80],["Sodiq Yusuff",1,3,false,80,60,82,76,68,78],["Youssef Zalal",1,2,false,72,58,74,65,62,72],["Lucas Almeida",1,2,false,70,62,68,65,65,70],["Cub Swanson",1,2,false,78,60,75,74,68,72],["Khabib Nurmagomedov",2,6,true,75,99,82,70,88,92],["Islam Makhachev",2,6,true,78,96,84,72,86,90],["Tony Ferguson",2,6,true,88,82,86,78,80,96],["Charles Oliveira",2,5,false,80,92,80,76,70,85],["Dustin Poirier",2,5,false,88,72,82,84,78,88],["Justin Gaethje",2,5,false,86,65,82,90,72,84],["Beneil Dariush",2,4,false,78,85,76,72,78,85],["Arman Tsarukyan",2,4,false,82,88,84,74,76,88],["Michael Chandler",2,4,false,84,72,82,90,70,82],["Eddie Alvarez",2,4,false,86,75,80,84,72,80],["Nate Diaz",2,4,false,82,80,72,72,88,90],["Dan Hooker",2,3,false,84,62,78,78,70,80],["Rafael Fiziev",2,3,false,88,58,88,82,65,78],["Mateusz Gamrot",2,3,false,76,84,78,70,75,86],["Diego Sanchez",2,3,false,78,75,72,74,84,88],["Paul Felder",2,3,false,80,68,76,74,72,80],["Drakkar Klose",2,2,false,72,65,74,68,68,74],["Nasrat Haqparast",2,2,false,74,58,76,70,62,72],["Kamaru Usman",3,6,true,82,92,84,78,84,95],["Georges St-Pierre",3,6,true,86,95,88,80,85,96],["Jorge Masvidal",3,6,true,92,70,88,90,72,82],["Leon Edwards",3,5,false,86,80,86,78,80,90],["Colby Covington",3,5,false,78,90,80,72,80,98],["Belal Muhammad",3,5,false,80,86,78,72,80,90],["Joaquin Buckley",3,4,false,90,65,82,90,65,78],["Jack Della Maddalena",3,4,false,88,70,84,86,70,82],["Shavkat Rakhmonov",3,4,false,85,85,80,85,72,82],["Tyron Woodley",3,4,false,84,82,78,86,78,80],["Robbie Lawler",3,4,false,90,70,78,90,70,78],["Khamzat Chimaev",3,3,false,82,90,80,82,78,86],["Stephen Thompson",3,3,false,92,52,90,74,68,80],["Michel Pereira",3,3,false,86,65,88,80,62,76],["Carlos Condit",3,3,false,84,72,82,78,70,82],["Nick Diaz",3,3,false,84,78,74,74,86,90],["Daniel Rodriguez",3,2,false,78,60,78,72,68,76],["Niko Price",3,2,false,76,62,72,76,68,72],["Anderson Silva",4,6,true,96,80,92,82,72,85],["Israel Adesanya",4,6,true,94,68,94,80,74,88],["Robert Whittaker",4,6,true,88,80,88,82,82,92],["Dricus Du Plessis",4,5,false,86,82,82,86,80,88],["Sean Strickland",4,5,false,88,72,82,76,84,92],["Nassourdine Imavov",4,5,false,86,75,84,78,74,84],["Caio Borralho",4,4,false,78,85,76,74,78,86],["Brendan Allen",4,4,false,76,85,74,72,76,84],["Yoel Romero",4,4,false,84,82,80,92,72,78],["Luke Rockhold",4,4,false,84,85,78,78,70,78],["Chris Weidman",4,4,false,80,88,76,76,76,80],["Paulo Costa",4,3,false,88,72,80,90,68,74],["Jack Hermansson",4,3,false,80,80,76,76,72,80],["Jared Cannonier",4,3,false,84,72,76,86,70,76],["Marvin Vettori",4,3,false,78,82,72,72,78,84],["Derek Brunson",4,3,false,78,78,74,78,70,80],["Alex Pereira",4,2,false,94,60,78,92,62,70],["Edmen Shahbazyan",4,2,false,80,65,76,80,62,72],["Francis Ngannou",5,6,true,84,72,76,99,62,72],["Stipe Miocic",5,6,true,85,82,74,86,85,90],["Fedor Emelianenko",5,6,true,90,88,76,92,80,80],["Tom Aspinall",5,5,false,86,82,80,86,78,85],["Ciryl Gane",5,5,false,86,72,82,80,76,84],["Sergei Pavlovich",5,5,false,84,65,74,92,65,74],["Curtis Blaydes",5,4,false,72,90,68,78,74,84],["Jailton Almeida",5,4,false,74,90,70,78,76,82],["Alistair Overeem",5,4,false,88,78,72,86,65,74],["Junior Dos Santos",5,4,false,90,68,74,86,72,74],["Cain Velasquez",5,4,false,80,90,74,80,80,88],["Brock Lesnar",5,4,false,72,88,62,88,65,68],["Derrick Lewis",5,3,false,78,60,62,98,62,62],["Tai Tuivasa",5,3,false,82,62,66,90,65,65],["Alexander Volkov",5,3,false,82,65,70,80,68,74],["Mark Hunt",5,3,false,84,60,60,94,72,62],["Tanner Boser",5,2,false,72,58,66,74,65,68],["Greg Hardy",5,2,false,74,52,64,86,55,58],];
+const weights=['Bantamweight','Featherweight','Lightweight','Welterweight','Middleweight','Heavyweight'];
+const statKeys=['STR','GRP','SPD','PWR','CHN','CRD'];
+const methods=['KO','TKO','Submission','Decision'];
+const fighters=fighterData.map(f=>({name:f[0],weight:_W[f[1]],stars:f[2],prime:f[3],stats:{STR:f[4],GRP:f[5],SPD:f[6],PWR:f[7],CHN:f[8],CRD:f[9]},level:1,upgrades:0}));
+const fBW={};_W.forEach(w=>{fBW[w]=fighters.filter(f=>f.weight===w);});
+let users=JSON.parse(_lg('ufcU4')||'{}');
+let user=null,myCol=[],coins=0,fightHist=[],elo=1000,rivalries={},achievements={},bank={},powerups=[],championships={};
+let currentPage='home',currentInnerTab=0;
+let notifications=[];
+const rand=a=>a[_f(_r()*a.length)];
+const randMethod=()=>methods[_f(_r()*methods.length)];
+function toast(msg,type=''){const t=$i('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',2800);}
+function statColor(v){return v>=90?'#22c55e':v>=75?'var(--gold)':v>=60?'#3b82f6':'#888';}
+function starsStr(n){return'★'.repeat(n)+'☆'.repeat(6-n);}
+function renderStatBars(stats){
+if(!stats)return'';
+return`<div class="stat-bars">${statKeys.map(k=>`<div class="stat-row"><div class="stat-lbl">${k}</div><div class="stat-track"><div class="stat-fill" style="width:${_m(stats[k]||70,99)}%;background:${statColor(stats[k]||70)}"></div></div><div class="stat-val" style="color:${statColor(stats[k]||70)}">${stats[k]||70}</div></div>`).join('')}</div>`;
+}
+function ovr(f){return _rd(Object.values(f.stats).reduce((a,b)=>a+b,0)/6);}
+function fightScore(f){const s=f.stats;return(s.STR*.22+s.GRP*.18+s.SPD*.18+s.PWR*.20+s.CHN*.12+s.CRD*.10)*(f.prime?1.15:1)*((f.level||1)*0.05+0.95)*(0.85+_r()*.3);}
+function runFight(f1,f2){const s1=fightScore(f1),s2=fightScore(f2);const winner=s1>s2?f1:f2,loser=winner===f1?f2:f1;const s=winner.stats;const r=_r()*100;let method=r<(s.PWR-60)/.8?'KO':r<(s.PWR-60)/.8+(s.GRP-50)/.6?'Submission':r<60?'TKO':'Decision';return{winner,loser,method};}
+function recordRivalry(a,b,aWon){const k=[a,b].sort().join('|');if(!rivalries[k])rivalries[k]={a,b,aW:0,bW:0,total:0};rivalries[k].total++;if(aWon)rivalries[k].aW++;else rivalries[k].bW++;}
+function toggleCardStats(id){const e=document.getElementById(id);if(e)e.style.display=e.style.display==='none'?'block':'none';}
+const QUOTES={"Conor McGregor":["Precision beats power!","We are not here to take part!","I am the best!"],"Khabib Nurmagomedov":["Smesh your rivals!","I am ready."],"Jon Jones":["Built for this.","Greatness is destiny."],"Israel Adesanya":["Stylebender strikes!","Beautiful."],"Francis Ngannou":["The Predator!","I come to destroy."],"default":["Let us fight!","No mercy.","Feel the power!","Lights out!"]};
+function getFighterQuote(name){const q=QUOTES[name]||QUOTES['default'];return rand(q);}
+function saveUser(){if(user&&user.username!=='Guest'){users[user.username]={coins,collection:myCol,fightHistory:fightHist,elo,rivalries,achievements,bank,powerups,championships};_ls('ufcU4',JSON.stringify(users));}}
+function login(){const nm=$i('username').value.trim();if(!nm){$i('loginMsg').textContent='Username eingeben.';return;}if(!users[nm]){$i('loginMsg').textContent='Nicht gefunden.';return;}user={username:nm};const u=users[nm];coins=u.coins||0;myCol=u.collection||[];fightHist=u.fightHistory||[];elo=u.elo||1000;rivalries=u.rivalries||{};achievements=u.achievements||{};bank=u.bank||{};powerups=u.powerups||[];championships=u.championships||{};startGame();}
+function register(){const nm=$i('username').value.trim();if(!nm){$i('loginMsg').textContent='Username eingeben.';return;}if(users[nm]){$i('loginMsg').textContent='Vergeben!';return;}user={username:nm};coins=1000;myCol=[];fightHist=[];elo=1000;rivalries={};achievements={};bank={};powerups=[];championships={};saveUser();startGame();}
+function guestPlay(){user={username:'Guest'};coins=500;myCol=[];fightHist=[];elo=1000;rivalries={};achievements={};bank={};powerups=[];championships={};startGame();}
+function logout(){saveUser();user=null;showLoginPage();}
+function showLoginPage(){['loginPage','gamePage'].forEach(p=>{const e=document.getElementById(p);if(e){e.classList.remove('active');if(p==='loginPage')e.style.display='flex';}});$i('loginPage').classList.add('active');$i('gamePage').classList.remove('active');}
+function startGame(){
+$i('loginPage').classList.remove('active');
+$i('gamePage').classList.add('active');
+initChampionships();
+addNotif('🎮','Willkommen zurück!',`Hey ${user.username}, dein Konto hat ${coins} Coins.`);
+checkWeeklyEvent();
+updateTopbar();
+switchPage('home',document.querySelector('.page-nav-btn'));
+}
+function eloRank(e){if(e>=2000)return{label:'🔴 LEGEND',color:'#e50914'};if(e>=1600)return{label:'🟣 ELITE',color:'#a855f7'};if(e>=1300)return{label:'🟡 DIAMOND',color:'var(--gold)'};if(e>=1100)return{label:'🔵 PLATINUM',color:'#3b82f6'};if(e>=900)return{label:'⚪ GOLD',color:'#f0f0f0'};return{label:'⚫ SILVER',color:'#888'};}
+function updateTopbar(){$i('coinsDisplay').textContent=coins.toLocaleString();const{label}=eloRank(elo);$i('eloPill').textContent=label+' '+elo;const nd=$i('notifDot');if(nd)nd.style.display=notifications.some(n=>!n.read)?'block':'none';}
+function addNotif(icon,title,body){notifications.unshift({icon,title,body,read:false,time:Date.now()});const nd=$i('notifDot');if(nd)nd.style.display='block';}
+function toggleNotif(){const p=$i('notifPanel');p.classList.toggle('open');if(p.classList.contains('open')){renderNotifs();notifications.forEach(n=>n.read=true);const nd=$i('notifDot');if(nd)nd.style.display='none';}}
+function renderNotifs(){const el=$i('notifList');if(!el)return;if(!notifications.length){el.innerHTML='<div style="color:var(--sub);text-align:center;padding:20px;font-size:.85rem">Keine Benachrichtigungen</div>';return;}el.innerHTML=notifications.slice(0,20).map(n=>`<div class="notif-item${n.read?'':' unread'}"><div class="news-time">${new Date(n.time).toLocaleTimeString('de')}</div><div style="font-size:.9rem">${n.icon} <b>${n.title}</b></div><div class="news-body">${n.body}</div></div>`).join('');}
+const PAGE_DEFS={
+home:{tabs:['🏠 Dashboard','📊 Stats','🔔 News Feed','🎖️ Achievements'],render:renderHomePage},
+fight:{tabs:['⚔️ Single Fight','📝 Draft','💀 Survival','🌍 Championship'],render:renderFightPage},
+cards:{tabs:['📦 Collection','🎁 Packs','⭐ Upgrade','🃏 Fusion'],render:renderCardsPage},
+games:{tabs:['🎮 Mini Games','🎰 Spin','🎯 Quiz','🔀 Trade'],render:renderGamesPage},
+more:{tabs:['🛒 Shop','🃏 Market','📈 Ranked','⚡ More'],render:renderMorePage},
+extra:{tabs:['🏆 Turnier','🎲 Random','🔮 Predictor','🎴 Fighter Info','🏋️ Training'],render:renderExtraPage},
+};
+function switchPage(pageId,btn){
+currentPage=pageId;currentInnerTab=0;
+$a('.page-nav-btn').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+renderInnerTabs();renderCurrentContent();
+}
+function switchInner(idx,btn){
+currentInnerTab=idx;
+$a('.inner-tab').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+renderCurrentContent();
+}
+function renderInnerTabs(){
+const def=PAGE_DEFS[currentPage];if(!def)return;
+const bar=$i('innerTabsBar');
+bar.innerHTML=def.tabs.map((t,i)=>`<button class="inner-tab${i===0?' active':''}" onclick="switchInner(${i},this)">${t}</button>`).join('');
+}
+function renderCurrentContent(){
+const def=PAGE_DEFS[currentPage];if(!def)return;
+def.render(currentInnerTab);
+}
+function renderHomePage(tab){
+const el=$i('mainContent');
+if(tab===0)el.innerHTML=renderDashboard();
+else if(tab===1)el.innerHTML=renderStatsPage();
+else if(tab===2)el.innerHTML=renderNewsFeed();
+else if(tab===3)el.innerHTML=renderAchievements();
+}
+function renderDashboard(){
+checkBankInterest();
+const primes=myCol.filter(f=>f.prime).length;
+const upgrades=myCol.reduce((a,f)=>(a+(f.upgrades||0)),0);
+const champCount=Object.values(championships).filter(d=>d.isPlayer).length;
+return`<div class="sec-title">WELCOME <span>BACK</span></div>
+<div class="sec-sub">Hey ${user.username} 👋</div>
+<div class="home-stats">
+<div class="stat-card"><div class="stat-num">${myCol.length}</div><div class="stat-lbl2">Karten</div></div>
+<div class="stat-card"><div class="stat-num">${primes}</div><div class="stat-lbl2">Primes</div></div>
+<div class="stat-card"><div class="stat-num">${fightHist.length}</div><div class="stat-lbl2">Kämpfe</div></div>
+<div class="stat-card"><div class="stat-num">${coins.toLocaleString()}</div><div class="stat-lbl2">Coins</div></div>
+<div class="stat-card"><div class="stat-num">${elo}</div><div class="stat-lbl2">ELO</div></div>
+<div class="stat-card"><div class="stat-num">${champCount}/6</div><div class="stat-lbl2">Titel</div></div>
+</div>
+<div class="card" style="margin-bottom:12px">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px">📊 STAT-ERKLÄRUNG</div>
+<table style="width:100%;border-collapse:collapse;font-size:.78rem">
+<tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;color:var(--sub);font-size:.65rem;letter-spacing:2px">KÜRZEL</th><th style="text-align:left;padding:6px 8px;color:var(--sub);font-size:.65rem">NAME</th><th style="text-align:left;padding:6px 8px;color:var(--sub);font-size:.65rem">BEDEUTUNG</th></tr>
+${[['STR','Striking','Schlagtechnik & Präzision'],['GRP','Grappling','Takedowns & Bodenkampf'],['SPD','Speed','Geschwindigkeit & Reaktion'],['PWR','Power','K.O.-Kraft'],['CHN','Chin','Einsteckqualität'],['CRD','Cardio','Ausdauer']].map(([k,n,d])=>`<tr style="border-bottom:1px solid rgba(255,255,255,.03)"><td style="padding:7px 8px;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold)">${k}</td><td style="padding:7px 8px;font-weight:700;font-size:.82rem">${n}</td><td style="padding:7px 8px;color:var(--sub);font-size:.78rem">${d}</td></tr>`).join('')}
+</table>
+</div>
+${renderWeeklyEventBanner()}
+${renderActivePowerups()}`;
+}
+function renderStatsPage(){
+const wins=fightHist.filter(h=>h.includes('WIN')||h.includes('Sieg')).length;
+const losses=fightHist.length-wins;
+const wr=fightHist.length?_rd((wins/fightHist.length)*100):0;
+const bestStar=myCol.length?_mx(...myCol.map(f=>f.stars)):0;
+return`<div class="sec-title">DEINE <span>STATS</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+${[['⚔️ Gesamt',''+fightHist.length],['✅ Siege',''+wins],['❌ Niederlagen',''+losses],['📊 Winrate',wr+'%'],['🌟 Top Stern',''+bestStar+'★'],['💎 Primes',''+myCol.filter(f=>f.prime).length],['⬆️ Upgrades',''+myCol.reduce((a,f)=>a+(f.upgrades||0),0)],['🏆 Titel',''+Object.values(championships).filter(d=>d.isPlayer).length+'/6']].map(([k,v])=>`<div class="card" style="text-align:center;padding:12px"><div style="font-size:1.5rem;font-family:'Bebas Neue',sans-serif;color:var(--red)">${v}</div><div style="font-size:.65rem;color:var(--sub);letter-spacing:2px;margin-top:2px">${k}</div></div>`).join('')}
+</div>
+<div class="card">
+<div style="font-size:.72rem;color:var(--sub);letter-spacing:2px;margin-bottom:8px">WIN RATE</div>
+<div style="height:10px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden;margin-bottom:4px"><div style="width:${wr}%;height:100%;background:var(--green);border-radius:5px"></div></div>
+<div class="tx-sub">${wins}W / ${losses}L</div>
+</div>`;
+}
+function renderNewsFeed(){
+const news=generateNews();
+return`<div class="sec-title">📰 NEWS <span>FEED</span></div>
+<div class="sec-sub">Aktuelle Events & Updates</div>
+${news.map(n=>`<div class="news-item"><div class="news-time">${n.time}</div><div class="news-title">${n.icon} ${n.title}</div><div class="news-body">${n.body}</div></div>`).join('')}`;
+}
+function generateNews(){return[{icon:'🏆',title:'Turnier',body:'Kämpfe für extra Coins!',time:'Gerade eben'},{icon:'🔥',title:'Prime-Fighter',body:'Öffne Packs für Primes.',time:'Vor 2h'},{icon:'💰',title:'Bank-Zinsen',body:'Coins haben Zinsen generiert.',time:'Vor 4h'},{icon:'⭐',title:'Upgrade-Event',body:'Upgrades heute günstiger!',time:'Vor 6h'},{icon:'🎮',title:'Punch Timing',body:'Neues Mini-Game!',time:'Vor 1d'},{icon:'🎪',title:'Weekly Challenge',body:'Belohnung claimen!',time:'Vor 2d'}];}
+function checkAchievements(){
+let newUnlocks=[];
+ACH_DEFS.forEach(a=>{if(!achievements[a.id]&&a.req()){achievements[a.id]=Date.now();if(a.reward>0){coins+=a.reward;}newUnlocks.push(a);}});
+if(newUnlocks.length){newUnlocks.forEach(a=>{toast(`🎖️ Achievement: ${a.name}! ${a.reward?'+'+a.reward+'🪙':''}`, 'gold');addNotif('🎖️','Achievement!',`${a.name} freigeschaltet${a.reward?' +'+a.reward+'🪙':''}!`);});updateTopbar();saveUser();}
+}
+function renderAchievements(){
+checkAchievements();
+const unlocked=ACH_DEFS.filter(a=>achievements[a.id]).length;
+return`<div class="sec-title">🎖️ ACHIEVEMENTS</div>
+<div class="sec-sub">${unlocked}/${ACH_DEFS.length} freigeschaltet</div>
+<div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:16px"><div style="width:${_rd((unlocked/ACH_DEFS.length)*100)}%;height:100%;background:var(--gold);border-radius:3px"></div></div>
+${ACH_DEFS.map(a=>{const done=!!achievements[a.id];return`<div class="ach-card${done?' unlocked':''}"><div class="ach-icon" style="${done?'':'filter:grayscale(1);opacity:.4'}">${a.icon}</div><div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-weight:700;font-size:.9rem">${a.name}</span>${done?'<span class="ach-badge">✓ DONE</span>':''}</div><div style="font-size:.75rem;color:var(--sub)">${a.desc}</div>${a.reward?`<div style="font-size:.72rem;color:var(--gold);margin-top:2px">+${a.reward}🪙</div>`:''}</div></div>`;}).join('')}`;
+}
+const WEEKLY_EVENTS=[
+{id:'wk_ko',name:'KO Week 🥊',desc:'+50🪙 pro KO-Sieg',bonus:'ko',multiplier:50},
+{id:'wk_sub',name:'Submission Fiesta 🔗',desc:'+75🪙 pro Sub',bonus:'sub',multiplier:75},
+{id:'wk_prime',name:'Prime Hunters 🔥',desc:'Prime -500🪙',bonus:'prime_disc',multiplier:500},
+{id:'wk_survival',name:'Survival Challenge 💀',desc:'Top Survival +200🪙',bonus:'survival',multiplier:200},
+];
+let activeWeeklyEvent=null;
+function checkWeeklyEvent(){const stored=_lg('weeklyEvent');if(stored){const d=JSON.parse(stored);if(Date.now()-d.start<7*24*60*60*1000){activeWeeklyEvent=d;return;}}activeWeeklyEvent=WEEKLY_EVENTS[_f(Date.now()/(7*24*60*60*1000))%WEEKLY_EVENTS.length];activeWeeklyEvent.start=Date.now();_ls('weeklyEvent',JSON.stringify(activeWeeklyEvent));}
+function renderWeeklyEventBanner(){if(!activeWeeklyEvent)return'';const rem=_mx(0,7*24*60*60*1000-(Date.now()-activeWeeklyEvent.start));const h=_f(rem/3600000),d=_f(h/24);return`<div class="event-card" style="margin-bottom:12px"><div style="font-size:.65rem;letter-spacing:3px;color:var(--sub);margin-bottom:4px">WEEKLY EVENT</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:4px">${activeWeeklyEvent.name}</div><div style="font-size:.8rem;color:var(--sub);margin-bottom:8px">${activeWeeklyEvent.desc}</div><div style="font-size:.65rem;color:var(--sub)">Endet in: <b style="color:white">${d}d ${h%24}h</b></div></div>`;}
+function getWeeklyBonus(method){if(!activeWeeklyEvent)return 0;if(activeWeeklyEvent.bonus==='ko'&&method==='KO')return activeWeeklyEvent.multiplier;if(activeWeeklyEvent.bonus==='sub'&&method==='Submission')return activeWeeklyEvent.multiplier;return 0;}
+const POWERUP_DEFS=[
+{id:'star_boost',icon:'⭐',name:'Star Boost',desc:'+20% Sieg x3',cost:200,uses:3,effect:'win_chance'},
+{id:'coin_boost',icon:'💰',name:'Coin Boost',desc:'2x Coins x5',cost:300,uses:5,effect:'double_coins'},
+{id:'prime_luck',icon:'🔥',name:'Prime Luck',desc:'+10% Prime',cost:500,uses:1,effect:'prime_chance'},
+{id:'elo_shield',icon:'🛡️',name:'ELO Shield',desc:'ELO Shield x1',cost:400,uses:1,effect:'elo_shield'},
+];
+function renderActivePowerups(){const active=powerups.filter(p=>p.uses>0);if(!active.length)return'';return`<div class="card" style="margin-bottom:12px"><div style="font-size:.7rem;letter-spacing:2px;color:var(--sub);margin-bottom:8px">⚡ AKTIVE POWER-UPS</div>${active.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:1.2rem">${p.icon}</span><div style="flex:1"><div style="font-size:.82rem;font-weight:700">${p.name}</div><div class="tx-sub2">${p.desc}</div></div><span style="font-size:.75rem;color:var(--green);font-weight:700">${p.uses}x</span></div>`).join('')}</div>`;}
+function getActivePowerup(effect){return powerups.find(p=>p.effect===effect&&p.uses>0);}
+function usePowerup(effect){const p=getActivePowerup(effect);if(p){p.uses--;if(p.uses<=0)powerups=powerups.filter(x=>x!==p);saveUser();}}
+function buyPowerup(id){const def=POWERUP_DEFS.find(d=>d.id===id);if(!def)return;if(coins<def.cost){toast('Nicht genug Coins!','red');return;}coins-=def.cost;const existing=powerups.find(p=>p.id===id);if(existing)existing.uses+=def.uses;else powerups.push({...def});toast(`${def.icon} ${def.name} aktiviert!`,'purple');updateTopbar();saveUser();renderMorePage(3);}
+const BANK_TIERS=[
+{id:'b1',name:'Spar',min:100,max:500,rate:0.05,label:'5%/24h'},
+{id:'b2',name:'Festgeld',min:500,max:2000,rate:0.10,label:'10%/24h'},
+{id:'b3',name:'Invest',min:2000,max:99999,rate:0.18,label:'18%/24h'},
+];
+function checkBankInterest(){const now=Date.now();Object.entries(bank).forEach(([tid,dep])=>{if(!dep||!dep.amount)return;const elapsed=now-dep.depositTime;const tier=BANK_TIERS.find(t=>t.id===tid);if(!tier)return;const periods=_f(elapsed/(24*60*60*1000));if(periods>0&&dep.lastPaid!==periods){const interest=_f(dep.amount*tier.rate*periods);dep.lastPaid=periods;dep.earned=(dep.earned||0)+interest;coins+=interest;addNotif('🏦','Bank-Zinsen!',`${tier.name}: +${interest}🪙 Zinsen erhalten.`);updateTopbar();saveUser();}});}
+function depositBank(tid){const tier=BANK_TIERS.find(t=>t.id===tid);const input=document.getElementById('bankIn_'+tid);if(!input||!tier)return;const amt=_i(input.value)||0;if(amt<tier.min){toast(`Minimum ${tier.min}🪙!`,'red');return;}if(amt>coins){toast('Nicht genug Coins!','red');return;}if(bank[tid]){bank[tid].amount+=amt;}else{bank[tid]={amount:amt,depositTime:Date.now(),lastPaid:0,earned:0};}coins-=amt;toast(`${amt}🪙 in ${tier.name} investiert!`,'green');updateTopbar();saveUser();renderMorePage(3);}
+function withdrawBank(tid){const dep=bank[tid];if(!dep||!dep.amount){toast('Nichts zu abheben!','red');return;}const total=dep.amount+(dep.earned||0);coins+=total;toast(`${total}🪙 abgehoben (inkl. ${dep.earned||0}🪙 Zinsen)!`,'gold');delete bank[tid];updateTopbar();saveUser();renderMorePage(3);}
+function renderBank(){
+checkBankInterest();
+return`<div class="sec-title">🏦 COIN <span>BANK</span></div>
+<div class="sec-sub">Investiere Coins und erhalte täglich Zinsen</div>
+${BANK_TIERS.map(t=>{const dep=bank[t.id];const hasDeposit=dep&&dep.amount>0;const pct=hasDeposit?_m(100,_f(((Date.now()-dep.depositTime)%(24*60*60*1000))/(24*60*60*1000)*100)):0;
+return`<div class="bank-tier">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+<div><div style="${_B7}">${t.name}</div><div class="tx-sub">${t.min}–${t.max===99999?'∞':t.max}🪙 · ${t.label}</div></div>
+${hasDeposit?`<div style="text-align:right"><div style="color:var(--green);font-weight:700">${dep.amount.toLocaleString()}🪙</div><div style="font-size:.7rem;color:var(--gold)">+${dep.earned||0}🪙 Zinsen</div></div>`:''}
+</div>
+${hasDeposit?`<div class="interest-bar"><div class="interest-fill" style="width:${pct}%"></div></div><div style="font-size:.68rem;color:var(--sub);margin-top:4px;margin-bottom:8px">Nächste Zinszahlung: ${pct}%</div><button class="btn btn-gr" style="width:100%;padding:7px;font-size:.78rem" onclick="withdrawBank('${t.id}')">💰 ABHEBEN (${(dep.amount+(dep.earned||0)).toLocaleString()}🪙)</button>`
+:`<div style="display:flex;gap:8px"><input id="bankIn_${t.id}" type="number" min="${t.min}" max="${t.max}" placeholder="${t.min}+" style="flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:white;font-family:Barlow,sans-serif;font-size:.82rem;outline:none"><button class="btn btn-gr" style="flex:unset;padding:8px 14px;font-size:.78rem" onclick="depositBank('${t.id}')">Einzahlen</button></div>`}
+</div>`}).join('')}`;
+}
+let fPool='all',_lF1=null,_lF2=null,lastFightTime=0,rematchCount=0;
+const FIGHT_CD=2*60*1000;
+function renderFightPage(tab){
+const el=$i('mainContent');
+if(tab===0)el.innerHTML=renderSingleFight();
+else if(tab===1)el.innerHTML=renderDraftUI();
+else if(tab===2)el.innerHTML=renderSurvivalUI();
+else if(tab===3)el.innerHTML=renderChampionshipUI();
+if(tab===0){populateFightLists();checkFightCD();}
+if(tab===1)populateDraft();
+if(tab===2&&!survivalState)renderSurvivalContent();
+if(tab===3)renderChampContent();
+}
+function renderSingleFight(){
+return`<div class="sec-title">SINGLE <span>FIGHT</span></div>
+<div class="sec-sub">Alle Fighter wählbar – kein Klassen-Filter!</div>
+<div class="sr">
+<button id="pBtnAll" class="btn btn-r" style="font-size:.75rem;padding:7px 14px" onclick="setPool('all')">🌍 Alle</button>
+<button id="pBtnOwn" class="btn btn-gh" style="font-size:.75rem;padding:7px 14px" onclick="setPool('own')">📦 Meine</button>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:10px">
+<input id="fs1" type="text" placeholder="🔍 Fighter 1..." oninput="filterFL(1)" style="flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:white;font-family:Barlow,sans-serif;font-size:.82rem;outline:none">
+<input id="fs2" type="text" placeholder="🔍 Fighter 2..." oninput="filterFL(2)" style="flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:white;font-family:Barlow,sans-serif;font-size:.82rem;outline:none">
+</div>
+<div style="display:grid;grid-template-columns:1fr 36px 1fr;gap:8px;align-items:start;margin-bottom:10px">
+<select id="fl1" size="7" style="height:150px;border-radius:10px;padding:4px" onchange="updateFightPreview()"></select>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:40px">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--red)">VS</div>
+<button onclick="swapF()" style="background:none;border:1px solid var(--border);color:var(--sub);border-radius:6px;padding:4px 6px;cursor:pointer;font-size:.7rem">⇄</button>
+</div>
+<select id="fl2" size="7" style="height:150px;border-radius:10px;padding:4px" onchange="updateFightPreview()"></select>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+<div id="fp1" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:.78rem;color:var(--sub);text-align:center">Fighter 1 wählen</div>
+<div id="fp2" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:.78rem;color:var(--sub);text-align:center">Fighter 2 wählen</div>
+</div>
+<div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
+<div style="font-size:.7rem;letter-spacing:2px;color:var(--sub);margin-bottom:8px">WETTE AUF:</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<button id="bb1" class="btn btn-o" style="flex:1;padding:8px;font-size:.75rem" onclick="setBet(1)">F1 +100🪙</button>
+<button id="bb2" class="btn btn-o" style="flex:1;padding:8px;font-size:.75rem" onclick="setBet(2)">F2 +100🪙</button>
+<button id="bb0" class="btn btn-gh" style="flex:1;padding:8px;font-size:.75rem" onclick="setBet(0)">Kein</button>
+</div>
+<div id="betSt" style="font-size:.72rem;color:var(--gold);margin-top:6px;text-align:center"></div>
+</div>
+<button class="btn btn-r" id="fightBtnEl" style="width:100%;padding:13px;letter-spacing:2px;font-size:.9rem" onclick="doSingleFight()">⚔️ FIGHT</button>
+<div id="fightCD" style="font-size:.72rem;color:var(--sub);text-align:center;margin-top:4px"></div>
+<div id="fightResultEl"></div>`;
+}
+function getPool(){return fPool==='own'&&myCol.length?myCol:fighters;}
+function setPool(p){fPool=p;$i('pBtnAll').className='btn '+(p==='all'?'btn-r':'btn-gh');$i('pBtnOwn').className='btn '+(p==='own'?'btn-r':'btn-gh');populateFightLists();}
+function populateFightLists(){
+const pool=[...getPool()].sort((a,b)=>b.stars-a.stars);
+const f1=$i('fl1'),f2=$i('fl2');if(!f1||!f2)return;
+f1.innerHTML=f2.innerHTML='';
+pool.forEach(f=>{const o=`<option value="${f.name}||${f.weight}">${f.name} · ${f.weight} · ${'★'.repeat(f.stars)}${f.prime?' ✦':''}</option>`;f1.innerHTML+=o;f2.innerHTML+=o;});
+if(pool.length>1)f2.selectedIndex=1;
+updateFightPreview();
+}
+function filterFL(n){
+const q=(document.getElementById('fs'+n)||{}).value?.toLowerCase()||'';
+const sel=document.getElementById('fl'+n);if(!sel)return;
+const pool=[...getPool()].sort((a,b)=>b.stars-a.stars);
+sel.innerHTML='';
+pool.filter(f=>f.name.toLowerCase().includes(q)||f.weight.toLowerCase().includes(q)).forEach(f=>{sel.innerHTML+=`<option value="${f.name}||${f.weight}">${f.name} · ${f.weight} · ${'★'.repeat(f.stars)}${f.prime?' ✦':''}</option>`;});
+updateFightPreview();
+}
+function swapF(){const s1=$i('fl1'),s2=$i('fl2');const v1=s1.value,v2=s2.value;for(let i=0;i<s1.options.length;i++)if(s1.options[i].value===v2){s1.selectedIndex=i;break;}for(let i=0;i<s2.options.length;i++)if(s2.options[i].value===v1){s2.selectedIndex=i;break;}updateFightPreview();}
+function updateFightPreview(){
+const v1=($i('fl1')||{}).value||'',v2=($i('fl2')||{}).value||'';
+function prev(v,id){
+const p=document.getElementById(id);if(!p)return;
+if(!v){p.innerHTML='<div style="color:var(--sub);text-align:center;padding:14px;font-size:.78rem">Fighter wählen</div>';return;}
+const[n,w]=v.split('||');const f=[...fighters,...myCol].find(x=>x.name===n&&x.weight===w)||fighters.find(x=>x.name===n);
+if(!f){p.innerHTML='';return;}
+const a=_rd(Object.values(f.stats).reduce((x,y)=>x+y,0)/6);
+p.innerHTML=`<div style="padding:8px"><div style="font-weight:700;font-size:.85rem;margin-bottom:2px">${f.name}${f.prime?' <span class="prime-badge">P</span>':''}${(f.level||1)>1?' <span class="lvl-badge">LV'+f.level+'</span>':''}</div><div style="font-size:.68rem;color:var(--sub);margin-bottom:4px">${f.weight} · ${'★'.repeat(f.stars)} · OVR ${a}</div>${renderStatBars(f.stats)}</div>`;
+}
+prev(v1,'fp1');prev(v2,'fp2');
+const n1=(v1.split('||')[0]||'F1').split(' ')[0];
+const n2=(v2.split('||')[0]||'F2').split(' ')[0];
+const b1=$i('bb1'),b2=$i('bb2');
+if(b1)b1.textContent=n1+' +100🪙';
+if(b2)b2.textContent=n2+' +100🪙';
+}
+let currentBet=0;
+function setBet(n){currentBet=n;const b1=$i('bb1'),b2=$i('bb2'),b0=$i('bb0'),bs=$i('betSt');if(b1)b1.style.background=n===1?'rgba(229,9,20,.3)':'';if(b2)b2.style.background=n===2?'rgba(229,9,20,.3)':'';if(b0)b0.style.background=n===0?'rgba(255,255,255,.1)':'';const v1=($i('fl1')||{}).value||'',v2=($i('fl2')||{}).value||'';if(bs)bs.textContent=n===0?'':`Wette auf ${n===1?(v1.split('||')[0]||'F1'):(v2.split('||')[0]||'F2')}`;}
+function checkFightCD(){const now=Date.now(),diff=now-lastFightTime;const cd=$i('fightCD'),btn=$i('fightBtnEl');if(diff<FIGHT_CD){const left=Math.ceil((FIGHT_CD-diff)/1000),m=_f(left/60),s=left%60;if(cd)cd.textContent=`⏳ ${m}:${s<10?'0':''}${s}`;if(btn){btn.disabled=true;btn.style.opacity='.5';}setTimeout(checkFightCD,1000);return false;}if(cd)cd.textContent='';if(btn){btn.disabled=false;btn.style.opacity='1';}return true;}
+function buildResultHTML(f1,f2,winner,method,coinGain,betMsg,quote1,quote2){
+const n1=f1.name,n2=f2.name,wColor=winner.name===n1?'#22c55e':'#3b82f6';
+const s1=f1.stats,s2=f2.stats;
+function mr(k,a,b){const c1=a>b?'#22c55e':a<b?'var(--red)':'#888',c2=b>a?'#22c55e':b<a?'var(--red)':'#888';return`<div style="display:flex;align-items:center;gap:5px;font-size:.7rem;margin-bottom:3px"><div style="width:22px;text-align:right;font-weight:700;color:${c1}">${a}</div><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;position:relative"><div style="position:absolute;right:50%;width:${_mx(0,a-b)/2}%;height:100%;background:${c1}"></div><div style="position:absolute;left:50%;width:${_mx(0,b-a)/2}%;height:100%;background:${c2}"></div></div><div style="width:22px;font-weight:700;color:${c2}">${b}</div><div style="width:26px;text-align:center;color:var(--sub);font-size:.63rem">${k}</div></div>`;}
+const sc=statKeys.map(k=>mr(k,s1[k]||70,s2[k]||70)).join('');
+const div=f1.weight===f2.weight?f1.weight:'Cross-Div';
+return`<div class="fight-result-box">
+<div style="font-size:.7rem;color:var(--sub);margin-bottom:8px;letter-spacing:2px">${div} · ${method}</div>
+${quote1?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px"><div style="background:rgba(255,255,255,.03);border-radius:8px;padding:8px;font-size:.72rem;font-style:italic;color:var(--sub)">"${quote1}"<div style="color:var(--sub);font-size:.65rem;margin-top:3px">— ${f1.name.split(' ').slice(-1)[0]}</div></div><div style="background:rgba(255,255,255,.03);border-radius:8px;padding:8px;font-size:.72rem;font-style:italic;color:var(--sub)">"${quote2}"<div style="color:var(--sub);font-size:.65rem;margin-top:3px">— ${f2.name.split(' ').slice(-1)[0]}</div></div></div>`:''}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<div class="tc-f1"><div style="font-weight:700;font-size:.88rem;color:${winner.name===n1?wColor:'var(--sub)'}">${n1}</div><div style="font-size:.68rem;color:var(--sub)">${'★'.repeat(f1.stars)}</div></div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--red);padding:0 6px">VS</div>
+<div class="tc-f1"><div style="font-weight:700;font-size:.88rem;color:${winner.name===n2?wColor:'var(--sub)'}">${n2}</div><div style="font-size:.68rem;color:var(--sub)">${'★'.repeat(f2.stars)}</div></div>
+</div>
+<div style="background:rgba(255,255,255,.03);border-radius:8px;padding:8px;margin-bottom:10px">${sc}</div>
+<div style="text-align:center">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:${wColor}">🏆 ${winner.name}</div>
+<div style="color:var(--sub);font-size:.78rem;margin-top:3px">gewinnt durch ${method}</div>
+<div style="color:var(--gold);font-weight:700;margin-top:6px">+${coinGain}🪙${betMsg}</div>
+<button class="btn btn-o" style="padding:7px 16px;font-size:.75rem;margin-top:8px;flex:unset" onclick="doRematch()">🔁 Rematch</button>
+</div>
+</div>`;
+}
+function doSingleFight(f1ov,f2ov,silent){
+if(!f1ov&&!checkFightCD())return null;
+let f1,f2;
+if(f1ov&&f2ov){f1=f1ov;f2=f2ov;}else{
+const v1=($i('fl1')||{}).value||'',v2=($i('fl2')||{}).value||'';
+if(!v1||!v2){toast('Zwei Fighter wählen!','red');return null;}
+const[n1,w1]=v1.split('||'),[n2,w2]=v2.split('||');
+const pool=[...fighters,...myCol];
+f1=pool.find(x=>x.name===n1&&x.weight===w1)||pool.find(x=>x.name===n1);
+f2=pool.find(x=>x.name===n2&&x.weight===w2)||pool.find(x=>x.name===n2);
+if(!f1||!f2||f1.name===f2.name){toast('Zwei verschiedene Fighter!','red');return null;}
+}
+_lF1=f1;_lF2=f2;
+const starBoost=getActivePowerup('win_chance');
+const dblCoins=getActivePowerup('double_coins');
+const{winner,loser,method}=runFight(f1,f2);
+if(!f1ov)lastFightTime=Date.now();
+let coinGain=30,betMsg='';
+if(!silent){
+if(currentBet===1&&winner.name===f1.name){coinGain+=100;betMsg=' +100🪙 Wette!';}
+else if(currentBet===2&&winner.name===f2.name){coinGain+=100;betMsg=' +100🪙 Wette!';}
+else if(currentBet!==0)betMsg=' Wette verloren.';
+const wBonus=getWeeklyBonus(method);if(wBonus){coinGain+=wBonus;betMsg+=` +${wBonus}🪙 Event!`;}
+if(dblCoins){coinGain*=2;usePowerup('double_coins');}
+coins+=coinGain;
+}
+recordRivalry(f1.name,f2.name,winner.name===f1.name);
+fightHist.unshift(`${f1.name} vs ${f2.name} → ${winner.name} (${method})${!silent?' +'+coinGain+'🪙':''}`);
+const q1=getFighterQuote(f1.name),q2=getFighterQuote(f2.name);
+const resultHTML=buildResultHTML(f1,f2,winner,method,coinGain,betMsg,q1,q2);
+if(!silent){
+const re=$i('fightResultEl');if(re)re.innerHTML=resultHTML;
+toast(`${winner.name} gewinnt! +${coinGain}🪙`,'gold');
+currentBet=0;setBet(0);updateTopbar();saveUser();checkAchievements();
+setTimeout(checkFightCD,1000);
+}
+return{winner,loser,method,resultHTML,coinGain};
+}
+function doRematch(){if(!_lF1||!_lF2){toast('Kein vorheriger Kampf!','red');return;}rematchCount++;const b=rematchCount*10;coins+=b;const r=doSingleFight(_lF1,_lF2,false);if(r){toast(`🔁 Rematch #${rematchCount} +${b}🪙 Bonus`,'gold');updateTopbar();saveUser();}}
+let userTeam={},botTeam={},lastDraftTime=0;
+const DRAFT_CD=2*60*1000;
+function renderDraftUI(){return`${_hdr("DRAFT","MODE","Wähle Fighter pro Klasse und kämpfe gegen den Bot")}
+<div class="weight-classes" id="draftCont"></div><button class="btn btn-r" id="draftFightBtn" style="display:none;width:100%;padding:14px;letter-spacing:2px" onclick="runDraftFight()">⚔️ FIGHT BOT</button><div id="draftResultEl"></div>`;}
+function populateDraft(){userTeam={};botTeam={};const b=$i('draftFightBtn');if(b)b.style.display='none';const r=$i('draftResultEl');if(r)r.innerHTML='';renderDraftCards();}
+function renderDraftCards(){const c=$i('draftCont');if(!c)return;c.innerHTML='';weights.forEach(w=>{const card=document.createElement('div');card.className='draft-card'+(userTeam[w]?' picked':'');card.id='dc-'+w;if(userTeam[w]){const f=userTeam[w];card.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;color:var(--sub);margin-bottom:4px">${w}</div><div style="${_B7}">${f.name}</div><div style="${_G}">${'★'.repeat(f.stars)}</div>`;}else{card.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;color:var(--sub);margin-bottom:4px">${w}</div><div style="color:#aaa;font-size:.82rem">👆 Antippen</div>`;card.onclick=()=>openDraftPicker(w);}c.appendChild(card);});if(Object.keys(userTeam).length===weights.length){const b=$i('draftFightBtn');if(b)b.style.display='block';}}
+function openDraftPicker(w){const card=document.getElementById('dc-'+w);const opts=[...fBW[w]].sort(()=>_r()-.5).slice(0,3);card.onclick=null;card.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;color:var(--sub);margin-bottom:6px">${w}</div><div style="display:flex;flex-direction:column;gap:5px">`+opts.map(f=>`<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:8px 10px;font-size:.82rem"><span><b>${f.name}</b> ${'★'.repeat(f.stars)}</span><button class="pick-btn" onclick="event.stopPropagation();doPick('${w}','${f.name}')">Pick</button></div>`).join('')+'</div>';}
+function doPick(w,name){const f=fighters.find(x=>x.name===name&&x.weight===w);if(!f)return;userTeam[w]=f;botTeam[w]=rand(fBW[w]);renderDraftCards();}
+function runDraftFight(){const now=Date.now();if(now-lastDraftTime<DRAFT_CD){const l=Math.ceil((DRAFT_CD-(now-lastDraftTime))/1000);toast(`Warte ${_f(l/60)}:${(l%60+'').padStart(2,'0')}!`,'red');return;}lastDraftTime=now;let up=0,bp=0;const rows=weights.map(w=>{const u=userTeam[w],b=botTeam[w];const uW=_r()<(.35+u.stars*.08)*(u.prime?1.2:1);if(uW)up++;else bp++;recordRivalry(u.name,b.name,uW);return`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:.82rem"><span><b>${w}</b>: ${u.name} vs ${b.name}</span><span>${uW?'<span style="color:#22c55e">✅ Du</span>':'<span style="color:var(--red)">❌ Bot</span>'} (${randMethod()})</span></div>`;}).join('');const won=up>bp,cr=won?200:50;coins+=cr;fightHist.unshift(`Draft ${up}-${bp} Bot → ${won?'WIN':'LOSS'} (+${cr}🪙)`);const dr=$i('draftResultEl');if(dr)dr.innerHTML=`<div class="fight-result-box" style="margin-top:12px">${rows}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><div style="font-size:1.1rem;font-weight:900">Du ${up} – Bot ${bp}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:${won?'#22c55e':'var(--red)'};">${won?'🏆 WIN!':'💀 LOSS'}</div></div><div style="color:var(--gold);font-weight:700;margin-top:6px">+${cr}🪙</div><button class="btn btn-o" style="margin-top:10px;width:100%;padding:9px;font-size:.78rem" onclick="populateDraft()">NOCHMAL</button></div>`;toast(won?`Draft Win! +${cr}🪙`:`Loss. +${cr}🪙`,won?'gold':'red');updateTopbar();saveUser();checkAchievements();}
+let survivalState=null;
+function renderSurvivalUI(){return`${_hdr("💀 SURVIVAL","MODE","Kämpfe bis zur Niederlage – Rekord brechen!")}
+<div id="survCont"></div>`;}
+function renderSurvivalContent(){const el=$i('survCont');if(!el)return;const record=_i(_lg('sRec')||'0');if(!survivalState){el.innerHTML=`<div style="text-align:center;margin-bottom:16px"><div style="font-size:.68rem;color:var(--sub);letter-spacing:3px">REKORD</div><div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);line-height:1">${record}</div><div style="font-size:.68rem;color:var(--sub)">SIEGE</div></div><div class="card"><div style="font-size:.7rem;color:var(--sub);letter-spacing:2px;margin-bottom:8px">FIGHTER WÄHLEN</div><select id="survSel" style="width:100%;margin-bottom:10px">${fighters.sort((a,b)=>b.stars-a.stars).map(f=>`<option value="${f.name}||${f.weight}">${f.name} · ${f.weight} · ${'★'.repeat(f.stars)}${f.prime?' ✦':''}</option>`).join('')}</select><button class="btn btn-r" style="width:100%;padding:12px;letter-spacing:2px" onclick="startSurvival()">💀 STARTEN</button></div>`;return;}const f=survivalState.fighter,hp=_mx(0,survivalState.hp),hpPct=(hp/survivalState.maxHp)*100,hpC=hpPct>60?'#22c55e':hpPct>30?'var(--gold)':'var(--red)';el.innerHTML=`<div style="background:var(--card-bg);border:1px solid rgba(229,9,20,.3);border-radius:14px;padding:16px"><div style="display:flex;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px"><div><div style="${_B7}">${f.name}${f.prime?' <span class="prime-badge">P</span>':''}</div><div class="tx-sub2">${f.weight} · ${'★'.repeat(f.stars)}</div></div><div style="text-align:right"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold)">${survivalState.wins}</div><div style="font-size:.68rem;color:var(--sub)">Siege · Rekord: ${record}</div></div></div><div style="font-size:.63rem;color:var(--sub);margin-bottom:4px">HP: ${hp}/${survivalState.maxHp}</div><div style="height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;margin-bottom:12px"><div style="width:${hpPct}%;height:100%;background:${hpC};border-radius:4px;transition:width .4s"></div></div>${survivalState.lastResult?`<div style="border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:8px;margin-bottom:10px;font-size:.8rem">${survivalState.lastResult}</div>`:''}<div style="font-size:.78rem;color:var(--sub);margin-bottom:8px">Nächster: <b style="color:white">${survivalState.nextOpp?.name}</b> ${'★'.repeat(survivalState.nextOpp?.stars||0)}</div><div style="display:flex;gap:8px"><button class="btn btn-r" style="flex:1;padding:11px" onclick="survivalFight()">⚔️ KÄMPFEN</button><button class="btn btn-gh" style="padding:11px 14px;flex:unset" onclick="survivalState=null;renderSurvivalContent()">✕</button></div></div>`;}
+function startSurvival(){const sel=$i('survSel');const[n,w]=(sel?.value||fighters[0].name+'||'+fighters[0].weight).split('||');const f=fighters.find(x=>x.name===n&&x.weight===w)||fighters[0];const mH=100+f.stars*20+(f.prime?50:0);survivalState={fighter:f,hp:mH,maxHp:mH,wins:0,nextOpp:rand(fighters.filter(x=>x.name!==f.name)),lastResult:null};renderSurvivalContent();}
+function survivalFight(){if(!survivalState)return;const f=survivalState.fighter,opp=survivalState.nextOpp;const{winner,method}=runFight(f,opp);const won=winner.name===f.name;const dmg=won?_f(_r()*10+3):_f(_r()*25+15);if(!won)survivalState.hp-=dmg;if(won){survivalState.wins++;survivalState.hp=_m(survivalState.maxHp,survivalState.hp+_f(_r()*8+2));}const rec=_i(_lg('sRec')||'0');if(survivalState.wins>rec)_ls('sRec',''+survivalState.wins);fightHist.unshift('[SURVIVAL] '+f.name+' vs '+opp.name+' → '+(won?'WIN':'LOSS')+' ('+method+')');recordRivalry(f.name,opp.name,won);if(survivalState.hp<=0){const rw=survivalState.wins*50;if(rw>0){coins+=rw;updateTopbar();}const w2=survivalState.wins;survivalState=null;toast(`💀 Ende: ${w2} Siege${rw?' +'+rw+'🪙':''}`,rw?'gold':'red');saveUser();checkAchievements();renderSurvivalContent();return;}survivalState.lastResult=won?`<span style="color:#22c55e">✅ Sieg vs ${opp.name} (${method})</span>`:`<span style="color:var(--sub)">⚠️ Niederlage vs ${opp.name} <span style="color:var(--red)">-${dmg} HP</span></span>`;survivalState.nextOpp=rand(fighters.filter(x=>x.name!==f.name));renderSurvivalContent();}
+function initChampionships(){if(Object.keys(championships).length)return;weights.forEach(w=>{const c=fBW[w].find(f=>f.prime)||fBW[w].filter(f=>f.stars>=5)[0]||fBW[w][0];championships[w]={champ:clone(c),defenses:0,isPlayer:false,challenger:null};});}
+function renderChampionshipUI(){return`<div class="sec-title">🌍 CHAMPIONSHIP</div><div class="sec-sub">Kämpfe um alle 6 Gürtel</div><div id="champCont"></div>`;}
+function renderChampContent(){const el=$i('champCont');if(!el)return;const pc=Object.values(championships).filter(d=>d.isPlayer).length;el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:.78rem;color:var(--sub)">Deine Titel: <b style="${_G}">${pc}/6</b></div>${pc===6?'<div style="color:var(--gold);font-weight:700;font-size:.82rem">👑 UNDISPUTED!</div>':''}</div>`+Object.entries(championships).map(([w,data])=>{const c=data.champ,isP=data.isPlayer,pf=myCol.filter(f=>f.weight===w);return`<div style="background:var(--card-bg);border:1px solid ${isP?'rgba(245,166,35,.4)':'var(--border)'};border-radius:12px;padding:14px;margin-bottom:8px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px"><div><div style="font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:3px;color:var(--sub)">${w}</div><div style="${_B7}">${isP?'👑 Du':'🤖 '+c.name}${c.prime?' <span class="prime-badge">P</span>':''}</div><div class="tx-sub2">${'★'.repeat(c.stars)} · ${data.defenses}x verteidigt</div></div>${isP?'<div style="color:var(--gold);font-size:.72rem;font-weight:700">CHAMPION</div>':''}</div>${isP?`<div style="font-size:.75rem;color:var(--sub);margin-bottom:7px">Herausforderer: <b style="color:white">${data.challenger?.name||'???'}</b></div><button class="btn btn-g" style="width:100%;padding:8px;font-size:.78rem" onclick="defendTitle('${w}')">🏆 VERTEIDIGEN +30🪙</button>`:pf.length?`<select id="cs_${w.replace(/ /g,'_')}" style="width:100%;margin-bottom:7px">${pf.map((f,i)=>`<option value="${i}">${f.name} LV${f.level||1} ${'★'.repeat(f.stars)}</option>`).join('')}</select><button class="btn btn-r" style="width:100%;padding:8px;font-size:.78rem" onclick="challengeTitle('${w}')">⚔️ UM DEN TITEL</button>`:`<div style="font-size:.78rem;color:var(--sub);text-align:center;padding:4px">Kein ${w} Fighter</div>`}</div>`;}).join('');}
+function challengeTitle(w){const sel=document.getElementById('cs_'+w.replace(/ /g,'_'));const pf=myCol.filter(f=>f.weight===w);const playerF=pf[_i(sel?.value||0)];if(!playerF)return;const data=championships[w];const{winner,method}=runFight(playerF,data.champ);const won=winner.name===playerF.name;recordRivalry(playerF.name,data.champ.name,won);fightHist.unshift('[CHAMP] '+playerF.name+' vs '+data.champ.name+' ('+w+') → '+(won?'CHAMPION!':'LOSS'));if(won){championships[w]={champ:clone(playerF),defenses:0,isPlayer:true,challenger:rand(fBW[w].filter(f=>f.name!==playerF.name))};coins+=300;addNotif('🏆','Neuer Champion!',`${playerF.name} ist jetzt ${w} Champion!`);toast(`🏆 ${w} Champion! +300🪙`,'gold');}else{toast(`💀 Niederlage gegen ${data.champ.name}!`,'red');}updateTopbar();saveUser();checkAchievements();renderChampContent();}
+function defendTitle(w){const data=championships[w];if(!data.isPlayer)return;const challenger=data.challenger||rand(fBW[w]);const{winner,method}=runFight(data.champ,challenger);const won=winner.name===data.champ.name;recordRivalry(data.champ.name,challenger.name,won);fightHist.unshift('[DEFENSE] '+data.champ.name+' vs '+challenger.name+' → '+(won?'DEFENDED':'LOST'));if(won){data.defenses++;coins+=30;data.challenger=rand(fBW[w].filter(f=>f.name!==data.champ.name));toast(`Verteidigt! +30🪙 · ${data.defenses}x`,'gold');}else{championships[w]={champ:clone(challenger),defenses:0,isPlayer:false,challenger:null};addNotif('💀','Titel verloren!',`${w} Titel an ${challenger.name} verloren!`);toast(`💀 Titel an ${challenger.name} verloren!`,'red');}updateTopbar();saveUser();checkAchievements();renderChampContent();}
+let upgradeFilter='',fusionSlot=[null,null];
+function renderCardsPage(tab){
+const el=$i('mainContent');
+if(tab===0)el.innerHTML=renderCollection();
+else if(tab===1)el.innerHTML=renderPacks();
+else if(tab===2)el.innerHTML=renderUpgrade();
+else if(tab===3)el.innerHTML=renderFusion();
+}
+function renderCollection(){
+if(!myCol.length)return`<div class="sec-title">MY <span>COLLECTION</span></div>${_mt("📦","Noch keine Fighter. Öffne Packs!")}`;
+const sorted=[...myCol].sort((a,b)=>b.stars-a.stars||(b.prime-a.prime));
+return`${_hdr("MY","COLLECTION","${myCol.length} Fighter · Tippe zum Aufklappen")}
+`+sorted.map((f,i)=>{const idx=myCol.indexOf(f);const sv=f.prime?500:f.stars===6?400:f.stars===5?250:f.stars===4?150:f.stars===3?100:50;return`<div class="fighter-card${f.prime?' prime':''}" style="flex-direction:column;align-items:stretch;cursor:pointer" onclick="toggleCardStats('cc-${idx}')"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="f-name">${f.name}${f.prime?' <span class="prime-badge">P</span>':''}${(f.level||1)>1?' <span class="lvl-badge">LV'+(f.level||1)+'</span>':''}</div><div class="f-meta">${f.weight} · ${'★'.repeat(f.stars)}</div></div><button class="sell-btn" onclick="event.stopPropagation();sellF(${idx})">+${sv}🪙</button></div><div id="cc-${idx}" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)">${renderStatBars(f.stats)}</div></div>`;}).join('');}
+function sellF(i){const f=myCol.splice(i,1)[0];const v=f.prime?500:f.stars===6?400:f.stars===5?250:f.stars===4?150:f.stars===3?100:50;coins+=v;toast(`${f.name} für +${v}🪙 verkauft`,'green');updateTopbar();saveUser();checkAchievements();renderCardsPage(0);}
+function renderPacks(){return`${_hdr("OPEN","PACKS","Kostenlos – eine pro Gewichtsklasse")}
+<div class="packs-grid">${weights.map(w=>`<div class="pack-card" onclick="openPack('${w}')"><div style="font-size:2.2rem;margin-bottom:8px">📦</div><div style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px">${w}</div><div style="font-size:.72rem;color:var(--gold);margin-top:3px;font-weight:700">FREE</div></div>`).join('')}</div>`;}
+function renderUpgrade(){const COSTS=[0,200,400,700,1200];if(!myCol.length)return`<div class="sec-title">⭐ UPGRADE</div>${_mt("⭐","Keine Fighter!")}`;return`<div class="sec-title">⭐ FIGHTER <span>UPGRADE</span></div><div style="background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:.78rem;color:var(--sub)">💡 LV1→2: 200🪙 · LV2→3: 400🪙 · LV3→4: 700🪙 · LV4→5: 1200🪙 · Jedes LV: alle Stats <b style="color:white">+3</b></div>`+[...myCol].sort((a,b)=>b.stars-a.stars).map(f=>{const idx=myCol.indexOf(f);const lv=f.level||1;const maxed=lv>=5;const cost=maxed?0:COSTS[lv-1];const can=coins>=cost;const pct=((lv-1)/4)*100;return`<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px"><div><div style="font-weight:700;font-size:.9rem">${f.name} <span class="lvl-badge">LV${lv}</span>${f.prime?' <span class="prime-badge">P</span>':''}</div><div class="f-meta">${f.weight} · ${'★'.repeat(f.stars)}</div></div>${maxed?'<div style="color:var(--gold);font-size:.78rem;font-weight:700">✨ MAX</div>':`<button class="btn ${can?'btn-g':'btn-gh'}" style="padding:6px 12px;font-size:.75rem;flex:unset" onclick="doUpgrade(${idx})" ${can?'':'disabled'}>LV${lv+1} · ${cost}🪙</button>`}</div><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><div style="font-size:.6rem;color:var(--sub)">1</div><div style="flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${maxed?'var(--gold)':'var(--red)'};border-radius:3px"></div></div><div style="font-size:.6rem;color:var(--sub)">5</div></div>${renderStatBars(f.stats)}</div>`;}).join('');}
+const UPGRADE_COSTS=[0,200,400,700,1200];
+function doUpgrade(idx){const f=myCol[idx];const lv=f.level||1;if(lv>=5){toast('Max Level!','red');return;}const cost=UPGRADE_COSTS[lv-1];if(coins<cost){toast('Nicht genug Coins!','red');return;}coins-=cost;f.level=lv+1;f.upgrades=(f.upgrades||0)+1;statKeys.forEach(k=>{f.stats[k]=_m(99,(f.stats[k]||70)+3);});toast(`${f.name} → LV${f.level}! Alle Stats +3`,'gold');updateTopbar();saveUser();checkAchievements();renderCardsPage(2);}
+function renderFusion(){return`${_hdr("🃏 CARD","FUSION","Kombiniere 2 Fighter zu einem stärkeren – beide Karten werden verbraucht!")}
+<div style="background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.78rem;color:var(--sub)">💡 Fusion Regeln: Gleiche Gewichtsklasse · Neuer Fighter = Sterne von Karte A · Stats werden gemittelt und +10% Bonus</div><div class="fusion-slots"><div class="fusion-slot${fusionSlot[0]?' filled':''}" onclick="openFusionPick(0)">${fusionSlot[0]?`<div style="font-weight:700;font-size:.85rem;margin-bottom:2px">${fusionSlot[0].name}</div><div style="color:var(--gold);font-size:.8rem">${'★'.repeat(fusionSlot[0].stars)}</div><div style="font-size:.68rem;color:var(--sub)">${fusionSlot[0].weight}</div><button onclick="event.stopPropagation();fusionSlot[0]=null;renderCardsPage(3)" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.8rem;margin-top:4px">✕</button>`:'<div style="font-size:1.5rem;margin-bottom:4px">➕</div><div style="font-size:.78rem;color:var(--sub)">Fighter A</div>'}</div><div class="fusion-plus">${fusionSlot[0]&&fusionSlot[1]?'⚡':'+'}</div><div class="fusion-slot${fusionSlot[1]?' filled':''}" onclick="openFusionPick(1)">${fusionSlot[1]?`<div style="font-weight:700;font-size:.85rem;margin-bottom:2px">${fusionSlot[1].name}</div><div style="color:var(--gold);font-size:.8rem">${'★'.repeat(fusionSlot[1].stars)}</div><div style="font-size:.68rem;color:var(--sub)">${fusionSlot[1].weight}</div><button onclick="event.stopPropagation();fusionSlot[1]=null;renderCardsPage(3)" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.8rem;margin-top:4px">✕</button>`:'<div style="font-size:1.5rem;margin-bottom:4px">➕</div><div style="font-size:.78rem;color:var(--sub)">Fighter B</div>'}</div></div>${fusionSlot[0]&&fusionSlot[1]?renderFusionPreview():''}`;}
+function openFusionPick(slot){const el=$i('mainContent');const pool=myCol.filter(f=>!fusionSlot.includes(f));if(!pool.length){toast('Nicht genug Fighter!','red');return;}el.innerHTML+=`<div id="fusionPickModal" style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:4000;display:flex;align-items:flex-end;padding:16px"><div style="background:#0f0f1a;border:1px solid var(--border);border-radius:16px 16px 0 0;width:100%;max-height:60vh;overflow-y:auto;padding:16px"><div style="font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:1rem;margin-bottom:12px;display:flex;justify-content:space-between">FIGHTER WÄHLEN <button onclick="$i('fusionPickModal').remove()" style="background:none;border:none;color:var(--sub);cursor:pointer">✕</button></div>${pool.map((f,i)=>`<div class="fighter-card" onclick="pickFusion(${slot},${myCol.indexOf(f)});$i('fusionPickModal').remove()"><div class="fighter-info-left"><div class="f-name">${f.name}</div><div class="f-meta">${f.weight} · ${'★'.repeat(f.stars)}</div></div></div>`).join('')}</div></div>`;}
+function pickFusion(slot,idx){fusionSlot[slot]=myCol[idx];renderCardsPage(3);}
+function renderFusionPreview(){const a=fusionSlot[0],b=fusionSlot[1];if(a.weight!==b.weight)return`<div style="background:rgba(229,9,20,.08);border:1px solid rgba(229,9,20,.2);border-radius:10px;padding:14px;text-align:center"><div style="color:var(--red);font-weight:700">⚠️ Verschiedene Gewichtsklassen!</div><div style="font-size:.78rem;color:var(--sub);margin-top:4px">Fusion nur innerhalb der gleichen Klasse möglich</div></div>`;const newStats={};statKeys.forEach(k=>{newStats[k]=_m(99,_rd(((a.stats[k]||70)+(b.stats[k]||70))/2*1.1));});const newStars=_m(6,a.stars+(b.stars>=4?1:0));const isPrime=a.prime&&b.prime;return`<div style="background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.3);border-radius:12px;padding:14px;margin-top:14px"><div style="font-size:.68rem;letter-spacing:3px;color:var(--sub);margin-bottom:8px">FUSION-ERGEBNIS</div><div style="text-align:center;margin-bottom:10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--purple)">${a.name.split(' ')[0]} × ${b.name.split(' ')[0]}</div><div style="${_G}">${'★'.repeat(newStars)} ${newStars>a.stars?'⬆️ UPGRADE!':''} ${isPrime?'<span class="prime-badge">PRIME</span>':''}</div><div class="tx-sub">${a.weight} · Stats: +10% Fusion Bonus</div></div>${renderStatBars(newStats)}<button class="btn-pu btn" style="width:100%;padding:11px;letter-spacing:2px;margin-top:12px" onclick="doFusion()">⚡ FUSION AUSFÜHREN</button></div>`;}
+function doFusion(){const a=fusionSlot[0],b=fusionSlot[1];if(!a||!b||a.weight!==b.weight){toast('Gleiche Gewichtsklasse!','red');return;}const newStats={};statKeys.forEach(k=>{newStats[k]=_m(99,_rd(((a.stats[k]||70)+(b.stats[k]||70))/2*1.1));});const newStars=_m(6,a.stars+(b.stars>=4?1:0));const isPrime=a.prime&&b.prime;const newFighter={name:`${a.name.split(' ')[0]}×${b.name.split(' ')[0]}`,weight:a.weight,stars:newStars,prime:isPrime,stats:newStats,level:_mx(a.level||1,b.level||1),upgrades:0};myCol=myCol.filter(f=>f!==a&&f!==b);myCol.push(newFighter);fusionSlot=[null,null];showPackResult(newFighter);toast(`⚡ Fusion erfolgreich! ${newFighter.name} erstellt`,'purple');updateTopbar();saveUser();checkAchievements();}
+let miniGameMode='reaction';
+function renderGamesPage(tab){
+const el=$i('mainContent');
+if(tab===0)el.innerHTML=renderMiniGames();
+else if(tab===1)el.innerHTML=renderSpin();
+else if(tab===2)el.innerHTML=renderQuiz();
+else if(tab===3)el.innerHTML=renderTrade();
+if(tab===0){if(miniGameMode==='reaction')initReactionGame();else initPunchGame();}
+if(tab===1){drawWheel();checkSpinCD();}
+}
+function renderMiniGames(){return`<div class="sec-title">🎮 MINI <span>GAMES</span></div>
+<div class="sr" style="margin-bottom:16px">
+<button class="btn ${miniGameMode==='reaction'?'btn-r':'btn-gh'}" onclick="setMiniGame('reaction')">⚡ Reaction Test</button>
+<button class="btn ${miniGameMode==='punch'?'btn-r':'btn-gh'}" onclick="setMiniGame('punch')">🥊 Punch Timing</button>
+</div>
+<div id="miniGameContent"></div>`;}
+function setMiniGame(mode){miniGameMode=mode;const btn1=document.querySelector('.page-nav-btn.active');renderGamesPage(0);}
+let rxState={round:0,hits:0,times:[],active:false,t1:null,t2:null};
+function initReactionGame(){
+const el=$i('miniGameContent');
+el.innerHTML=`<div style="text-align:center">
+<div style="display:flex;justify-content:space-around;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)" id="rxRound">0/5</div><div style="font-size:.6rem;color:var(--sub)">RUNDE</div></div>
+<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#22c55e" id="rxHits">0</div><div style="font-size:.6rem;color:var(--sub)">HITS</div></div>
+<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--red)" id="rxAvg">-</div><div style="font-size:.6rem;color:var(--sub)">Ø MS</div></div>
+</div>
+<div id="reactionCircle" onclick="rxClick()">WARTE...</div>
+<div id="rxMsg" style="font-size:.82rem;color:var(--sub);min-height:22px;margin-bottom:10px"></div>
+<div id="rxTimes" style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:12px"></div>
+<button class="btn btn-r" id="rxStartBtn" onclick="startRx()" style="padding:11px 32px;letter-spacing:2px">⚡ START</button>
+<div id="rxReward" style="display:none;margin-top:14px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:16px">
+<div id="rxRText" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);letter-spacing:3px"></div>
+<div id="rxRSub" style="font-size:.78rem;color:var(--sub);margin-top:3px"></div>
+</div>
+</div>`;}
+function startRx(){rxState={round:0,hits:0,times:[],active:false,t1:null,t2:null};$i('rxStartBtn').style.display='none';$i('rxReward').style.display='none';$i('rxTimes').innerHTML='';rxNextRound();}
+function rxNextRound(){if(rxState.round>=5){rxEnd();return;}rxState.round++;rxState.active=false;const c=$i('reactionCircle');if(!c)return;c.className='';c.textContent='BEREIT...';$i('rxRound').textContent=rxState.round+'/5';$i('rxMsg').textContent='';const d=1200+_r()*2500;rxState.t2=setTimeout(()=>{if(!$i('reactionCircle'))return;c.className='ready';c.textContent='JETZT!';rxState.active=true;rxState.startTime=Date.now();rxState.t1=setTimeout(()=>{if(rxState.active){rxState.active=false;c.className='early';c.textContent='ZU SPÄT!';$i('rxMsg').textContent='Zu langsam!';addRxTag(null);setTimeout(rxNextRound,1000);}},1200);},d);}
+function rxClick(){if(rxState.round===0)return;if(!rxState.active){clearTimeout(rxState.t2);const c=$i('reactionCircle');if(!c)return;c.className='early';c.textContent='ZU FRÜH!';$i('rxMsg').textContent='Zu früh gedrückt!';addRxTag(null);rxState.active=false;setTimeout(rxNextRound,900);return;}clearTimeout(rxState.t1);rxState.active=false;const ms=Date.now()-rxState.startTime;rxState.times.push(ms);rxState.hits++;const c=$i('reactionCircle');c.className='hit';c.textContent=ms+'ms';$i('rxHits').textContent=rxState.hits;const avg=_rd(rxState.times.reduce((a,b)=>a+b,0)/rxState.times.length);$i('rxAvg').textContent=avg;addRxTag(ms);setTimeout(rxNextRound,800);}
+function addRxTag(ms){const w=$i('rxTimes');if(!w)return;const t=document.createElement('div');t.style.cssText=`padding:3px 8px;border-radius:5px;font-size:.72rem;font-weight:700;background:${ms?'rgba(34,197,94,.15)':'rgba(229,9,20,.15)'};border:1px solid ${ms?'rgba(34,197,94,.3)':'rgba(229,9,20,.3)'};color:${ms?'#22c55e':'var(--red)'}`;t.textContent=ms?ms+'ms':'✗';w.appendChild(t);}
+function rxEnd(){const c=$i('reactionCircle');if(c){c.textContent='FERTIG!';c.className='';}const avg=rxState.times.length?_rd(rxState.times.reduce((a,b)=>a+b,0)/rxState.times.length):999;let rw=rxState.hits>=5?300:rxState.hits>=4?200:rxState.hits>=3?120:rxState.hits>=2?60:rxState.hits>=1?20:0;if(avg<200&&rxState.hits>=4)rw+=100;if(rw>0){coins+=rw;updateTopbar();saveUser();}const rb=$i('rxReward'),rt=$i('rxRText'),rs=$i('rxRSub'),rsb=$i('rxStartBtn');if(rb)rb.style.display='block';if(rt)rt.textContent=`${rxState.hits}/5 Hits → +${rw}🪙`;if(rs)rs.textContent=avg<999?`Ø ${avg}ms`:'Weiter üben!';if(rsb)rsb.style.display='inline-flex';toast(`Reaction: ${rxState.hits}/5 Hits, +${rw}🪙`,'gold');checkAchievements();}
+let punchState={round:0,score:0,active:false,animId:null,pos:0,dir:1,speed:2};
+function initPunchGame(){
+const el=$i('miniGameContent');
+el.innerHTML=`<div style="text-align:center">
+<div style="font-size:.78rem;color:var(--sub);margin-bottom:4px">Drücke PUNCH wenn der Cursor auf dem grünen Sweet Spot ist!</div>
+<div style="display:flex;justify-content:space-around;margin-bottom:14px;flex-wrap:wrap;gap:6px">
+<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px 14px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)" id="pRound">0/8</div><div style="font-size:.6rem;color:var(--sub)">RUNDE</div></div>
+<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px 14px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#22c55e" id="pScore">0</div><div style="font-size:.6rem;color:var(--sub)">PUNKTE</div></div>
+<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px 14px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--red)" id="pMult">x1</div><div style="font-size:.6rem;color:var(--sub)">MULTI</div></div>
+</div>
+<div style="margin-bottom:8px;font-size:.82rem;font-weight:700" id="pMsg">Drücke START</div>
+<div id="punchBar" style="margin:0 auto 14px;max-width:360px;cursor:pointer" onclick="punchHit()">
+<div class="sweet" id="pSweet"></div>
+<div class="cursor" id="pCursor"></div>
+</div>
+<div id="pHitMsg" style="font-size:1.1rem;font-weight:700;min-height:28px;margin-bottom:10px"></div>
+<button class="btn btn-r" id="pStartBtn" onclick="startPunch()" style="padding:11px 32px;letter-spacing:2px">🥊 START</button>
+<div id="pReward" style="display:none;margin-top:14px;background:rgba(229,9,20,.08);border:1px solid rgba(229,9,20,.2);border-radius:12px;padding:16px">
+<div id="pRText" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);letter-spacing:3px"></div>
+<div id="pRSub" style="font-size:.78rem;color:var(--sub);margin-top:3px"></div>
+</div>
+</div>`;}
+function startPunch(){punchState={round:0,score:0,active:false,animId:null,pos:0,dir:1,speed:1.5,streak:0,multiplier:1};$i('pStartBtn').style.display='none';$i('pReward').style.display='none';$i('pHitMsg').textContent='';punchNextRound();}
+function punchNextRound(){if(punchState.round>=8){punchEnd();return;}punchState.round++;punchState.active=true;punchState.pos=0;punchState.dir=1;punchState.speed=_m(4,1.5+punchState.round*.25);
+const bar=$i('punchBar'),sw=$i('pSweet');if(!bar||!sw)return;const bp=10+_f(_r()*60);const bw=15-punchState.round;sw.style.left=bp+'%';sw.style.width=_mx(6,bw)+'%';$i('pRound').textContent=punchState.round+'/8';$i('pMsg').textContent='PUNCH!';$i('pMult').textContent='x'+punchState.multiplier;punchAnimate();}
+function punchAnimate(){if(!punchState.active)return;punchState.pos+=punchState.dir*punchState.speed;if(punchState.pos>=100){punchState.pos=100;punchState.dir=-1;}else if(punchState.pos<=0){punchState.pos=0;punchState.dir=1;}const cur=$i('pCursor');if(cur)cur.style.left=punchState.pos+'%';punchState.animId=requestAnimationFrame(punchAnimate);}
+function punchHit(){if(!punchState.active)return;cancelAnimationFrame(punchState.animId);punchState.active=false;const bar=$i('punchBar'),sw=$i('pSweet'),hm=$i('pHitMsg');if(!bar||!sw||!hm)return;const swL=parseFloat(sw.style.left),swW=parseFloat(sw.style.width),hit=punchState.pos>=swL&&punchState.pos<=swL+swW;if(hit){punchState.streak++;punchState.multiplier=_m(4,1+_f(punchState.streak/2));const pts=100*punchState.multiplier;punchState.score+=pts;hm.textContent=`💥 TREFFER! +${pts} (x${punchState.multiplier})`;hm.style.color='#22c55e';}else{punchState.streak=0;punchState.multiplier=1;hm.textContent=`❌ Daneben! (${_rd(punchState.pos)}% vs ${_rd(swL)}-${_rd(swL+swW)}%)`;hm.style.color='var(--red)';}$i('pScore').textContent=punchState.score;$i('pMult').textContent='x'+punchState.multiplier;setTimeout(punchNextRound,900);}
+function punchEnd(){const rw=_f(punchState.score/10);if(rw>0){coins+=rw;updateTopbar();saveUser();}const rb=$i('pReward'),rt=$i('pRText'),rs=$i('pRSub'),sb=$i('pStartBtn');if(rb)rb.style.display='block';if(rt)rt.textContent=`Score: ${punchState.score} → +${rw}🪙`;if(rs)rs.textContent=`Bester Streak: ${punchState.streak}x`;if(sb)sb.style.display='inline-flex';$i('pMsg').textContent='FERTIG!';toast(`Punch Game: ${punchState.score} Punkte, +${rw}🪙`,'gold');}
+const W_SEGS=[{label:'+100',coins:100,color:'#c0392b',type:'coins'},{label:'+250',coins:250,color:'#1a237e',type:'coins'},{label:'+50',coins:50,color:'#4a1942',type:'coins'},{label:'PACK',coins:0,color:'#1b5e20',type:'pack'},{label:'+500',coins:500,color:'#e65100',type:'coins'},{label:'+150',coins:150,color:'#1a237e',type:'coins'},{label:'💀',coins:0,color:'#212121',type:'none'},{label:'🔥',coins:0,color:'#7b4f00',type:'prime'}];
+const SC=W_SEGS.length,SA=(Math.PI*2)/SC;
+let wAngle=0,wSpinning=false;
+function renderSpin(){return`${_hdr("🎰 SPIN","WHEEL","Einmal täglich – Coins oder Fighter!")}
+<div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:8px"><div style="position:relative;width:280px;height:280px"><div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:10;font-size:1.8rem">▼</div><canvas id="wCanvas" width="280" height="280" style="border-radius:50%;display:block"></canvas></div><button class="btn btn-r" id="spinBtnEl" onclick="spinW()" style="padding:12px 40px;font-size:.95rem;letter-spacing:3px">🎰 SPIN</button><div id="spinCDEl" style="font-size:.78rem;color:var(--sub);letter-spacing:2px"></div><div id="spinResEl" style="display:none;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px 24px;text-align:center;min-width:220px"><div id="spinIcon" style="font-size:2.5rem;margin-bottom:6px"></div><div id="spinTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px"></div><div id="spinSub" style="font-size:.78rem;color:var(--sub);margin-top:3px;letter-spacing:2px"></div></div></div>`;}
+function drawWheel(a=0){const cv=$i('wCanvas');if(!cv)return;const ctx=cv.getContext('2d'),cx=140,cy=140,r=135;ctx.clearRect(0,0,280,280);W_SEGS.forEach((s,i)=>{const st=a+i*SA-Math.PI/2,en=st+SA;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,st,en);ctx.closePath();ctx.fillStyle=s.color;ctx.fill();ctx.strokeStyle='rgba(0,0,0,.5)';ctx.lineWidth=2;ctx.stroke();ctx.save();ctx.translate(cx,cy);ctx.rotate(st+SA/2);ctx.textAlign='right';ctx.fillStyle='#fff';ctx.font='bold 12px Barlow,Arial';ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=3;ctx.fillText(s.label,r-10,4);ctx.restore();});ctx.beginPath();ctx.arc(cx,cy,20,0,Math.PI*2);ctx.fillStyle='#0a0a0f';ctx.fill();ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#fff';ctx.font='bold 10px Barlow,Arial';ctx.textAlign='center';ctx.fillText('UFC',cx,cy+3);}
+function checkSpinCD(){const ls=_lg('ufcSpin'),b=$i('spinBtnEl'),c=$i('spinCDEl');if(!ls){if(b){b.disabled=false;b.style.opacity='1';}if(c)c.textContent='Du hast einen freien Spin!';return;}const diff=Date.now()-_i(ls),day=24*60*60*1000;if(diff>=day){if(b){b.disabled=false;b.style.opacity='1';}if(c)c.textContent='Freier Spin verfügbar!';}else{if(b){b.disabled=true;b.style.opacity='.5';}const rem=day-diff,h=_f(rem/3600000),m=_f((rem%3600000)/60000);if(c)c.textContent=`Nächster Spin in ${h}h ${m}m`;}}
+function spinW(){if(wSpinning)return;wSpinning=true;const b=$i('spinBtnEl');if(b){b.disabled=true;b.style.opacity='.5';}const sr=$i('spinResEl');if(sr)sr.style.display='none';const winIdx=_f(_r()*SC),win=W_SEGS[winIdx];const extra=(6+_f(_r()*4))*Math.PI*2;const cur=((wAngle%(Math.PI*2))+Math.PI*2)%(Math.PI*2);const tgt=((-winIdx*SA-SA/2)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);let delta=tgt-cur;if(delta<=0)delta+=Math.PI*2;const endA=wAngle+extra+delta,dur=4000,startA=wAngle,startT=performance.now();function ease(t){return 1-Math.pow(1-t,4);}function anim(now){const el=now-startT,t=_m(el/dur,1);wAngle=startA+(endA-startA)*ease(t);drawWheel(wAngle);if(t<1)requestAnimationFrame(anim);else{wSpinning=false;_ls('ufcSpin',''+Date.now());showSpinResult(win);checkSpinCD();}}requestAnimationFrame(anim);}
+function showSpinResult(win){const sr=$i('spinResEl'),icon=$i('spinIcon'),title=$i('spinTitle'),sub=$i('spinSub');if(win.type==='coins'){coins+=win.coins;icon.textContent='🪙';title.textContent='+'+win.coins+' COINS';title.style.color='var(--gold)';sub.textContent='Hinzugefügt!';toast(`+${win.coins}🪙 Spin!`,'gold');}else if(win.type==='pack'){const w=rand(weights),f=clone(rand(fBW[w]));f.level=1;f.upgrades=0;myCol.push(f);icon.textContent='📦';title.textContent='FREE PACK!';title.style.color='#22c55e';sub.textContent=f.name;toast(`Pack: ${f.name}`,'green');}else if(win.type==='prime'){const f=clone(rand(fighters.filter(f=>f.prime)));f.level=1;f.upgrades=0;myCol.push(f);icon.textContent='🔥';title.textContent='PRIME!';title.style.color='var(--gold)';sub.textContent=f.name;toast(`PRIME: ${f.name}!`,'gold');}else{icon.textContent='💀';title.textContent='NICHTS...';title.style.color='var(--sub)';sub.textContent='Nächstes Mal!';toast('Diesmal nichts...','');}if(sr)sr.style.display='block';updateTopbar();saveUser();checkAchievements();}
+let quiz=null;
+function renderQuiz(){const h=`${_hdr("🎯","QUIZ","3 Fragetypen · Streak Bonus · +30🪙/Antwort")}
+<div id="quizCont"><div style="text-align:center;padding:28px"><button class="btn btn-r" style="padding:12px 32px;letter-spacing:2px" onclick="startQuiz();renderQuizQ()">🎯 QUIZ STARTEN</button></div></div>`;return h;}
+function startQuiz(){quiz={q:0,total:10,correct:0,streak:0,maxStreak:0,done:false,reward:0};renderQuizQ();}
+function renderQuizQ(){const el=$i('quizCont');if(!el)return;if(!quiz)return;if(quiz.done){el.innerHTML=`<div style="text-align:center;padding:28px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px"><div style="font-size:3.5rem;margin-bottom:8px">${quiz.correct>=8?'🧠':quiz.correct>=5?'👍':'😅'}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:4px">${quiz.correct}/10 RICHTIG</div><div style="color:var(--gold);font-weight:700;font-size:1rem;margin-bottom:4px">+${quiz.reward}🪙</div><div style="color:var(--sub);font-size:.78rem;margin-bottom:16px">Best Streak: ${quiz.maxStreak} 🔥</div><button class="btn btn-r" style="padding:11px 32px;letter-spacing:2px" onclick="startQuiz();renderQuizQ()">NOCHMAL</button></div>`;return;}const types=['weight','stars','prime'];const qtype=types[_f(_r()*3)];const f=rand(fighters);quiz.current=f;quiz.qtype=qtype;let q='',opts=[],correct='';if(qtype==='weight'){q=`In welcher Gewichtsklasse kämpft <b>${f.name}</b>?`;correct=f.weight;opts=[f.weight,...weights.filter(w=>w!==f.weight).sort(()=>_r()-.5).slice(0,3)].sort(()=>_r()-.5);}else if(qtype==='stars'){q=`Wie viele ★ hat <b>${f.name}</b>?`;correct=String(f.stars);opts=[f.stars,...[1,2,3,4,5,6].filter(s=>s!==f.stars).sort(()=>_r()-.5).slice(0,3)].map(String).sort(()=>_r()-.5);}else{q=`Ist <b>${f.name}</b> eine PRIME-Karte?`;correct=f.prime?'Ja':'Nein';opts=['Ja','Nein'];}const bp=30+(quiz.streak>=3?quiz.streak*5:0);el.innerHTML=`<div style="display:flex;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px"><div style="font-size:.78rem;color:var(--sub)">F ${quiz.q+1}/10</div><div class="tx-gold">+${bp}🪙</div>${quiz.streak>1?`<div style="color:var(--red);font-weight:700;font-size:.82rem">🔥 ${quiz.streak}x</div>`:''}</div><div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;margin-bottom:12px"><div style="font-size:.95rem;line-height:1.5;margin-bottom:6px">${q}</div><div style="${_G}">${'★'.repeat(f.stars)}</div>${f.prime?'<div class="prime-badge" style="margin-top:5px">PRIME</div>':''}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${opts.map(o=>`<button class="btn btn-o" style="padding:13px;font-size:.82rem" onclick="ansQ('${o}')">${o}</button>`).join('')}</div>`;}
+function ansQ(c){if(!quiz||quiz.done)return;const f=quiz.current,correct=quiz.qtype==='stars'?String(f.stars):quiz.qtype==='prime'?(f.prime?'Ja':'Nein'):f.weight;const bp=30+(quiz.streak>=3?quiz.streak*5:0);if(c===correct){quiz.correct++;quiz.streak++;quiz.maxStreak=_mx(quiz.maxStreak,quiz.streak);quiz.reward+=bp;toast(`✅ Richtig! +${bp}🪙`,'green');}else{quiz.streak=0;toast(`❌ Falsch! Antwort: ${correct}`,'red');}quiz.q++;if(quiz.q>=quiz.total){quiz.done=true;coins+=quiz.reward;updateTopbar();saveUser();checkAchievements();}setTimeout(()=>{if(quiz&&!quiz.done)renderQuizQ();else{const el=$i('quizCont');if(el&&quiz&&quiz.done)renderQuizQ();}},600);}
+let tradeOff=null;
+function renderTrade(){return`${_hdr("🔀","TRADER","Tausche Fighter gegen Bot-Angebote")}
+<div id="tradeCont"></div>`;}
+function renderTradeContent(){const el=$i('tradeCont');if(!el)return;if(!myCol.length){el.innerHTML='<div class="empty"><div class="icon">🔀</div><p>Keine Fighter!</p></div>';return;}el.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><div style="font-size:.7rem;color:var(--sub);letter-spacing:2px;margin-bottom:6px">DEIN FIGHTER</div><select id="tSel" style="width:100%;margin-bottom:8px">${[...myCol].sort((a,b)=>b.stars-a.stars).map((f,i)=>`<option value="${myCol.indexOf(f)}">${f.name} (${'★'.repeat(f.stars)})</option>`).join('')}</select><button class="btn btn-o" style="width:100%;padding:9px;font-size:.78rem" onclick="genOffer()">🔀 ANGEBOT</button></div><div><div style="font-size:.7rem;color:var(--sub);letter-spacing:2px;margin-bottom:6px">BOT BIETET</div>${tradeOff?`<div class="fighter-card${tradeOff.prime?' prime':''}"><div><div class="f-name">${tradeOff.name}</div><div class="f-meta">${tradeOff.weight}</div></div><span class="stars">${'★'.repeat(tradeOff.stars)}</span></div><button class="btn btn-g" style="width:100%;padding:8px;font-size:.78rem;margin-bottom:6px" onclick="acceptTrade()">✅ AKZEPTIEREN</button><button class="btn btn-gh" style="width:100%;padding:7px;font-size:.75rem" onclick="genOffer()">🔄 Reroll</button>`:`<div style="color:var(--sub);font-size:.82rem;padding:16px;text-align:center;border:1px dashed var(--border);border-radius:10px">Angebot anfordern</div>`}</div></div>`;}
+function rollPack(pool){const r=_r()*100;let f;if(r<2)f=pool.filter(x=>x.prime);else if(r<5)f=pool.filter(x=>x.stars===5&&!x.prime);else if(r<25)f=pool.filter(x=>x.stars===4&&!x.prime);else f=pool.filter(x=>x.stars<=3&&!x.prime);if(!f||!f.length)f=pool;return rand(f);}
+function genOffer(){const sel=$i('tSel');const mf=myCol[_i(sel?.value||0)];const pool=(fBW[mf.weight]||fighters).filter(f=>f.name!==mf.name);tradeOff=clone(rollPack(pool));tradeOff.level=1;tradeOff.upgrades=0;renderTradeContent();}
+function acceptTrade(){const sel=$i('tSel');const idx=_i(sel?.value||0);const mf=myCol[idx];myCol.splice(idx,1);myCol.push(tradeOff);toast(`Getauscht: ${mf.name} → ${tradeOff.name}!`,tradeOff.prime?'gold':'green');tradeOff=null;updateTopbar();saveUser();renderTradeContent();}
+let mListings=[];
+function renderMorePage(tab){
+const el=$i('mainContent');
+if(tab===0)el.innerHTML=renderShop();
+else if(tab===1){if(!mListings.length)refreshMarket();el.innerHTML=renderMarket();}
+else if(tab===2)el.innerHTML=renderRanked();
+else if(tab===3)el.innerHTML=renderMoreTab();
+if(tab===2)renderRankedContent();
+}
+function renderShop(){return`${_hdr("COIN","SHOP","Garantierte Hochkaräter")}
+<div class="shop-grid"><div class="shop-item" onclick="buyPack(4)"><div style="font-size:2.5rem;margin-bottom:8px">⭐⭐⭐⭐</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;margin-bottom:4px">4-Star Pack</div><div class="tx-gold">500 🪙</div></div><div class="shop-item" onclick="buyPack(5)"><div style="font-size:2.5rem;margin-bottom:8px">🌟🌟🌟🌟🌟</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;margin-bottom:4px">5-Star Pack</div><div class="tx-gold">1.000 🪙</div></div><div class="shop-item" style="border-color:rgba(245,166,35,.3)" onclick="buyPrime()"><div style="font-size:2.5rem;margin-bottom:8px">🔥</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;margin-bottom:4px">PRIME Pack</div><div class="tx-gold">2.500 🪙</div></div></div>`;}
+function buyPack(st){const c=st===4?500:1000;if(coins<c){toast('Nicht genug Coins!','red');return;}coins-=c;const pool=fighters.filter(f=>f.stars>=st&&!f.prime);const f=clone(rand(pool));f.level=1;f.upgrades=0;myCol.push(f);showPackResult(f);updateTopbar();saveUser();checkAchievements();}
+function buyPrime(){if(coins<2500){toast('Nicht genug Coins!','red');return;}coins-=2500;const f=clone(rand(fighters.filter(f=>f.prime)));f.level=1;f.upgrades=0;myCol.push(f);showPackResult(f);updateTopbar();saveUser();}
+function openPack(w){const pool=fBW[w].filter(f=>!f.prime);const f=clone(rollPack(pool));f.level=1;f.upgrades=0;myCol.push(f);showPackResult(f);updateTopbar();saveUser();checkAchievements();}
+function refreshMarket(){mListings=[];[...fighters].sort(()=>_r()-.5).slice(0,12).forEach(f=>{const base=f.prime?2800:f.stars===6?1500:f.stars===5?900:f.stars===4?400:f.stars===3?200:80;mListings.push({fighter:clone(f),price:_rd(base*(.8+_r()*.5)/10)*10,seller:'Bot-'+_f(_r()*999)});});}
+function renderMarket(){return`<div class="sec-title">🃏 PACK <span>MARKET</span></div><div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><button class="btn btn-o" style="padding:7px 14px;font-size:.75rem;flex:unset" onclick="renderMorePage(1)">🛒 Kaufen</button><button class="btn btn-o" style="padding:7px 14px;font-size:.75rem;flex:unset" onclick="renderMarketSell()">💰 Verkaufen</button><button class="btn btn-gh" style="padding:7px 14px;font-size:.75rem;flex:unset" onclick="refreshMarket();renderMorePage(1)">🔄</button></div><div id="marketCont">`+mListings.map((l,i)=>`<div class="market-listing"><div><div class="tx-h">${l.fighter.name}${l.fighter.prime?' <span class="prime-badge">P</span>':''}</div><div class="tx-sub2">${l.fighter.weight} · ${'★'.repeat(l.fighter.stars)} · ${l.seller}</div></div><div style="display:flex;align-items:center;gap:8px"><div class="tx-gold">${l.price}🪙</div><button class="btn btn-gr" style="padding:5px 10px;font-size:.75rem;flex:unset" onclick="buyMarket(${i})">Kaufen</button></div></div>`).join('')+'</div>';}
+function renderMarketSell(){const el=$i('marketCont');if(!el)return;if(!myCol.length){el.innerHTML='<div class="empty"><div class="icon">🃏</div><p>Keine Fighter!</p></div>';return;}el.innerHTML=[...myCol].sort((a,b)=>b.stars-a.stars).map((f,i)=>{const base=f.prime?2800:f.stars===6?1500:f.stars===5?900:f.stars===4?400:f.stars===3?200:80;const p=_rd(base*(1+(f.level-1)*.1));return`<div class="market-listing"><div><div class="tx-h">${f.name}${f.prime?' <span class="prime-badge">P</span>':''} <span class="lvl-badge">LV${f.level||1}</span></div><div class="tx-sub2">${f.weight} · ${'★'.repeat(f.stars)}</div></div><div style="display:flex;align-items:center;gap:8px"><div class="tx-gold">${p}🪙</div><button class="sell-btn" onclick="sellToMarket(${myCol.indexOf(f)},${p})">Stellen</button></div></div>`;}).join('');}
+function buyMarket(i){const l=mListings[i];if(!l)return;if(coins<l.price){toast('Nicht genug Coins!','red');return;}coins-=l.price;myCol.push(clone(l.fighter));mListings.splice(i,1);toast(`${l.fighter.name} gekauft!`,'green');updateTopbar();saveUser();renderMorePage(1);}
+function sellToMarket(i,p){const f=myCol.splice(i,1)[0];coins+=p;toast(`${f.name} für ${p}🪙 verkauft`,'gold');updateTopbar();saveUser();renderMorePage(1);}
+let rankedCD=0,rankedState={};
+const RANKED_CD=3*60*1000;
+function renderRanked(){return`${_hdr("📈 RANKED","MODE","Kämpfe um ELO-Punkte")}
+<div id="rankedCont"></div>`;}
+function renderRankedContent(){const el=$i('rankedCont');if(!el)return;const{label,color}=eloRank(elo);const now=Date.now(),onCD=now-rankedCD<RANKED_CD,cdL=onCD?Math.ceil((RANKED_CD-(now-rankedCD))/1000):0;const tiers=[{min:2000,label:'🔴 LEGEND',c:'#e50914'},{min:1600,label:'🟣 ELITE',c:'#a855f7'},{min:1300,label:'🟡 DIAMOND',c:'var(--gold)'},{min:1100,label:'🔵 PLATINUM',c:'#3b82f6'},{min:900,label:'⚪ GOLD',c:'#f0f0f0'},{min:0,label:'⚫ SILVER',c:'#888'}];el.innerHTML=`<div style="text-align:center;padding:20px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;margin-bottom:14px"><div style="font-size:3rem;margin-bottom:6px">${label.split(' ')[0]}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:4px;color:${color}">${label.split(' ').slice(1).join(' ')}</div><div style="font-size:.72rem;color:var(--sub);margin-top:3px">ELO: <b style="color:white">${elo}</b></div><div style="margin:12px 0 0;background:rgba(255,255,255,.06);border-radius:4px;height:6px;overflow:hidden"><div style="height:100%;width:${_m(100,((elo-900)/1100)*100)}%;background:${color};border-radius:4px"></div></div></div>${myCol.length?`<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:.7rem;color:var(--sub);letter-spacing:2px;margin-bottom:8px">FIGHTER</div><select id="rFSel" style="width:100%;margin-bottom:10px">${myCol.map((f,i)=>`<option value="${i}">${f.name} (${f.stars}★) LV${f.level||1}</option>`).join('')}</select>${onCD?`<div style="color:var(--sub);font-size:.78rem;text-align:center">⏳ ${_f(cdL/60)}:${(cdL%60+'').padStart(2,'0')}</div>`:`<button class="btn btn-r" style="width:100%;padding:11px;letter-spacing:2px" onclick="playRanked()">⚔️ RANKED FIGHT</button>`}</div>`:''}<div style="display:flex;flex-direction:column;gap:5px">${tiers.map(t=>{const active=elo>=t.min&&(tiers[tiers.indexOf(t)-1]===undefined||elo<(tiers[tiers.indexOf(t)-1]?.min||99999));return`<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid ${active?t.c:'var(--border)'};border-radius:9px;padding:9px 12px;opacity:${elo>=t.min?1:.4}"><div style="font-weight:700;font-size:.82rem;color:${t.c}">${t.label}</div><div class="tx-sub">${t.min}+ ELO</div>${active?`<div style="font-size:.68rem;color:var(--gold);font-weight:700">◀ DU</div>`:''}</div>`;}).join('')}</div>`;if(onCD)setTimeout(renderRankedContent,1000);}
+function playRanked(){const sel=$i('rFSel');if(!sel)return;const f=myCol[_i(sel.value)];if(!f)return;const now=Date.now();if(now-rankedCD<RANKED_CD){renderRankedContent();return;}rankedCD=now;const pool=fighters.filter(b=>Math.abs(b.stars-f.stars)<=1&&b.weight===f.weight);const opp=rand(pool.length?pool:fighters);const{winner,method}=runFight(f,opp);const won=winner.name===f.name;const eloShield=getActivePowerup('elo_shield');const eloC=won?_f(25+f.stars*2):eloShield?0:_f(-(15+opp.stars*2));if(!won&&eloShield){usePowerup('elo_shield');toast('🛡️ ELO Shield aktiv – kein ELO Verlust!','purple');}elo=_mx(0,elo+eloC);recordRivalry(f.name,opp.name,won);fightHist.unshift('[RANKED] '+f.name+' vs '+opp.name+' → '+(won?'WIN':'LOSS')+' ('+eloC+'ELO)');addNotif(won?'⚔️':'💀',won?'Ranked Sieg!':'Ranked Niederlage',`${f.name} vs ${opp.name}: ${eloC>=0?'+':''}${eloC} ELO`);updateTopbar();saveUser();checkAchievements();renderRankedContent();}
+let moreSubTab='powerups';
+function renderMoreTab(){return`<div class="sec-title">⚡ <span>MORE</span></div><div class="sr" style="margin-bottom:14px"><button class="btn ${moreSubTab==='powerups'?'btn-r':'btn-gh'}" onclick="moreSubTab='powerups';renderMorePage(3)">⚡ Power-Ups</button><button class="btn ${moreSubTab==='bank'?'btn-r':'btn-gh'}" onclick="moreSubTab='bank';renderMorePage(3)">🏦 Bank</button><button class="btn ${moreSubTab==='challenges'?'btn-r':'btn-gh'}" onclick="moreSubTab='challenges';renderMorePage(3)">⚡ Challenges</button><button class="btn ${moreSubTab==='log'?'btn-r':'btn-gh'}" onclick="moreSubTab='log';renderMorePage(3)">📜 Log</button><button class="btn ${moreSubTab==='rivalry'?'btn-r':'btn-gh'}" onclick="moreSubTab='rivalry';renderMorePage(3)">👥 Rivalen</button><button class="btn ${moreSubTab==='lb'?'btn-r':'btn-gh'}" onclick="moreSubTab='lb';renderMorePage(3)">🏅 Ranks</button></div>${moreSubTab==='powerups'?renderPowerups():moreSubTab==='bank'?renderBank():moreSubTab==='challenges'?renderChallenges():moreSubTab==='log'?renderLog():moreSubTab==='rivalry'?renderRivalries():renderLeaderboard()}`;}
+function renderPowerups(){return`<div style="margin-bottom:12px">${renderActivePowerups()}</div><div style="font-size:.7rem;color:var(--sub);letter-spacing:2px;margin-bottom:10px">KAUFEN</div>${POWERUP_DEFS.map(d=>{const active=powerups.find(p=>p.id===d.id&&p.uses>0);const can=coins>=d.cost;return`<div class="powerup-card${active?' powerup-active':''}"><div style="font-size:1.8rem">${d.icon}</div><div style="flex:1"><div class="tx-h">${d.name}</div><div class="tx-sub">${d.desc}</div>${active?`<div style="font-size:.7rem;color:#22c55e;margin-top:2px">${active.uses}x noch aktiv</div>`:''}</div><div style="text-align:right"><div style="color:var(--gold);font-weight:700;font-size:.82rem;margin-bottom:5px">${d.cost}🪙</div><button class="btn ${can?'btn-pu':'btn-gh'}" style="padding:5px 10px;font-size:.72rem;flex:unset" onclick="buyPowerup('${d.id}')" ${can?'':'disabled'}>Kaufen</button></div></div>`;}).join('')}`;}
+const CH_DEFS=[{id:'op3',label:'3 Packs',desc:'Öffne 3 Packs',reward:150,icon:'📦',goal:3,track:'packsOpened'},{id:'fi5',label:'5x Kampf',desc:'Beliebig',reward:200,icon:'⚔️',goal:5,track:'fightsToday'},{id:'sl2',label:'2 Verkäufe',desc:'Collection',reward:100,icon:'💸',goal:2,track:'soldToday'},{id:'c10',label:'10+ Fighter',desc:'Sammeln',reward:300,icon:'🏆',goal:10,track:'colSize'},{id:'sp1',label:'Spin x1',desc:'Drehen',reward:75,icon:'🎰',goal:1,track:'spunToday'}];
+function getCS(){const today=new Date().toDateString(),s=JSON.parse(_lg('ufcCh')||'{}');if(s.date!==today){const f={date:today,progress:{},claimed:{}};CH_DEFS.forEach(c=>{f.progress[c.track]=0;f.claimed[c.id]=false;});_ls('ufcCh',JSON.stringify(f));return f;}return s;}
+function saveCS(s){_ls('ufcCh',JSON.stringify(s));}
+function trackCh(k,n=1){const s=getCS();s.progress[k]=(s.progress[k]||0)+n;if(k==='colSize')s.progress[k]=myCol.length;saveCS(s);}
+function renderChallenges(){const s=getCS();s.progress['colSize']=myCol.length;saveCS(s);return'<div style="display:flex;flex-direction:column;gap:10px">'+CH_DEFS.map(c=>{const prog=_m(s.progress[c.track]||0,c.goal),done=prog>=c.goal,claimed=s.claimed[c.id],pct=_rd((prog/c.goal)*100);const btnHtml=claimed?'<div style="font-size:.7rem;color:var(--sub);text-align:center;letter-spacing:2px">✓ EINGELÖST</div>':done?'<button class="btn btn-g" style="width:100%;padding:7px;font-size:.78rem" onclick="claimCh(\''+c.id+'\','+c.reward+')">CLAIM +'+c.reward+'🪙</button>':'';return'<div style="background:rgba(255,255,255,.04);border:1px solid '+(done&&!claimed?'rgba(34,197,94,.4)':claimed?'rgba(255,255,255,.06)':'var(--border)')+'  ;border-radius:12px;padding:14px;opacity:'+(claimed?.5:1)+'"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px"><div style="display:flex;align-items:center;gap:10px"><div style="font-size:1.6rem">'+c.icon+'</div><div><div class="tx-h">'+c.label+'</div><div class="tx-sub">'+c.desc+'</div></div></div><div style="text-align:right"><div style="color:var(--gold);font-weight:700;font-size:.82rem">+'+c.reward+'🪙</div><div class="tx-sub2">'+prog+'/'+c.goal+'</div></div></div><div style="background:rgba(255,255,255,.08);border-radius:3px;height:5px;overflow:hidden;margin-bottom:8px"><div style="height:100%;width:'+pct+'%;background:'+(done?'#22c55e':'var(--red)')+'  ;border-radius:3px;transition:width .4s"></div></div>'+btnHtml+'</div>';}).join('')+'</div>';}
+function claimCh(id,r){const s=getCS();if(s.claimed[id])return;s.claimed[id]=true;saveCS(s);coins+=r;toast(`+${r}🪙 Challenge!`,'gold');updateTopbar();saveUser();renderMorePage(3);}
+function renderLog(){if(!fightHist.length)return'<div class="empty"><div class="icon">📜</div><p>Noch keine Kämpfe!</p></div>';return`<div style="display:flex;flex-direction:column;gap:8px">${fightHist.slice(0,25).map(e=>`<div class="log-entry">${e}</div>`).join('')}</div>`;}
+function renderRivalries(){const rv=Object.values(rivalries).filter(r=>r.total>0).sort((a,b)=>b.total-a.total);if(!rv.length)return'<div class="empty"><div class="icon">👥</div><p>Kämpfe mit gleichen Fightern mehrfach!</p></div>';return rv.map(r=>{const ap=r.total?_rd((r.aW/r.total)*100):50;return`<div class="rivalry-card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="tc-f1"><div class="tx-h">${r.a}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--red)">${r.aW}</div></div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--red)">VS</div><div class="tc-f1"><div class="tx-h">${r.b}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--blue)">${r.bW}</div></div></div><div class="rivalry-bar-wrap"><div style="width:${ap}%;height:100%;background:var(--red);border-radius:4px 0 0 4px"></div><div style="width:${100-ap}%;height:100%;background:var(--blue);border-radius:0 4px 4px 0"></div></div><div style="font-size:.68rem;color:var(--sub);text-align:center;margin-top:5px">${r.total} Kämpfe</div></div>`;}).join('');}
+function renderLeaderboard(){const all=JSON.parse(_lg('ufcU4')||'{}');const rows=Object.entries(all).map(([n,u])=>({n,coins:u.coins||0,cards:(u.collection||[]).length,primes:(u.collection||[]).filter(f=>f.prime).length,elo:u.elo||1000})).sort((a,b)=>b.elo-a.elo);if(!rows.length)return'<div class="empty"><div class="icon">🏅</div><p>Keine Spieler!</p></div>';const medals=['🥇','🥈','🥉'];return`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.82rem"><thead><tr style="border-bottom:1px solid var(--border);color:var(--sub);font-size:.62rem;letter-spacing:2px"><th style="padding:8px 6px;text-align:left">#</th><th style="padding:8px 6px;text-align:left">Spieler</th><th style="padding:8px 6px;text-align:right">ELO</th><th style="padding:8px 6px;text-align:right">🪙</th><th style="padding:8px 6px;text-align:right">📦</th></tr></thead><tbody>${rows.map((r,i)=>`<tr style="border-bottom:1px solid rgba(255,255,255,.04);${r.n===user?.username?'background:rgba(229,9,20,.07);':''}"><td style="padding:9px 6px;color:var(--gold)">${medals[i]||i+1}</td><td style="padding:9px 6px;font-weight:${r.n===user?.username?700:400};color:${r.n===user?.username?'var(--red)':'white'}">${r.n}${r.n===user?.username?' (du)':''}</td><td style="padding:9px 6px;text-align:right;color:var(--gold)">${r.elo}</td><td style="padding:9px 6px;text-align:right">${r.coins.toLocaleString()}</td><td style="padding:9px 6px;text-align:right">${r.cards}</td></tr>`).join('')}</tbody></table></div>`;}
+let scratchDone=false;
+function showPackResult(f){
+const ov=$i('packOverlay'),p1=$i('packPhase1'),p2=$i('packPhase2'),p3=$i('packPhase3');
+p1.style.display='flex';p2.style.display='none';p3.style.display='none';scratchDone=false;ov.classList.add('show');
+const ip=f.prime;
+$i('scratchStars').textContent=starsStr(f.stars);
+$i('scratchName').textContent=f.name;$i('scratchName').style.color=ip?'var(--gold)':'#fff';
+$i('scratchWeight').textContent=f.weight;$i('scratchPrime').style.display=ip?'block':'none';
+$i('scratchUnder').className='scratch-under'+(ip?' prime-under':'');$i('scratchWrap').className='scratch-wrap'+(ip?' prime-wrap':'');
+$i('finalStars').textContent=starsStr(f.stars);$i('finalName').textContent=f.name;$i('finalName').style.color=ip?'var(--gold)':'#fff';
+$i('finalWeight').textContent=f.weight;$i('finalPrime').style.display=ip?'inline-block':'none';
+$i('finalStats').innerHTML=renderStatBars(f.stats);$i('finalCard').className='final-card'+(ip?' prime-final':'');$i('finalCloseBtn').className='final-close-btn'+(ip?' prime-btn':'');
+window._cpf=f;
+setTimeout(()=>{p1.style.display='none';p2.style.display='flex';initScratch(f);},1200);
+}
+function initScratch(f){
+const old=$i('scratchCanvas'),nc=old.cloneNode(false);old.parentNode.replaceChild(nc,old);
+const canvas=$i('scratchCanvas'),ctx=canvas.getContext('2d'),ip=f.prime,W=280,H=280;
+canvas.width=W;canvas.height=H;
+const g=ctx.createLinearGradient(0,0,W,H);if(ip){g.addColorStop(0,'#3a2800');g.addColorStop(1,'#5a3f00');}else{g.addColorStop(0,'#1a0505');g.addColorStop(1,'#2a0a0a');}
+ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle=ip?'rgba(245,166,35,.12)':'rgba(229,9,20,.12)';
+for(let i=0;i<300;i++){ctx.beginPath();ctx.arc(_r()*W,_r()*H,_r()*4+1,0,Math.PI*2);ctx.fill();}
+ctx.fillStyle=ip?'#f5a623':'#e50914';ctx.font='bold 16px Arial';ctx.textAlign='center';ctx.fillText('✦ SCRATCH HERE ✦',W/2,H/2-8);ctx.fillStyle='rgba(255,255,255,.5)';ctx.font='12px Arial';ctx.fillText('drag to reveal',W/2,H/2+14);
+let scratching=false,cnt=0;
+function gp(e){const r=canvas.getBoundingClientRect(),sx=W/r.width,sy=H/r.height,src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*sx,y:(src.clientY-r.top)*sy};}
+function doS(e){e.preventDefault();if(!scratching)return;const p=gp(e);ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(p.x,p.y,W*.12,0,Math.PI*2);ctx.fill();cnt++;if(cnt%4===0&&!scratchDone)chkReveal(ctx,f,W,H);}
+canvas.addEventListener('mousedown',e=>{scratching=true;doS(e);});canvas.addEventListener('mousemove',e=>{if(scratching)doS(e);});canvas.addEventListener('mouseup',()=>scratching=false);canvas.addEventListener('mouseleave',()=>scratching=false);canvas.addEventListener('touchstart',e=>{scratching=true;doS(e);},{passive:false});canvas.addEventListener('touchmove',e=>{if(scratching)doS(e);},{passive:false});canvas.addEventListener('touchend',()=>scratching=false);}
+function chkReveal(ctx,f,W,H){const d=ctx.getImageData(0,0,W,H).data;let t=0;for(let i=3;i<d.length;i+=4)if(d[i]<128)t++;if(t/(d.length/4)>0.4)triggerFullReveal(f);}
+function triggerFullReveal(f){if(scratchDone)return;scratchDone=true;$i('scratchHint').textContent='';setTimeout(()=>{$i('packPhase2').style.display='none';$i('packPhase3').style.display='flex';toast(`${f.name} ${starsStr(f.stars)}`,f.stars>=5||f.prime?'gold':'');},350);}
+function closePackOverlay(){$i('packOverlay').classList.remove('show');}
+function renderExtraPage(tab){
+const el=$i('mainContent');
+if(tab===0){el.innerHTML=renderTournamentUI();renderTournamentContent();}
+else if(tab===1){el.innerHTML=renderRandomUI();renderRandomContent();}
+else if(tab===2){el.innerHTML=renderPredictorUI();renderPredictorContent();}
+else if(tab===3){el.innerHTML=renderFighterInfoUI();filterFighterInfo();}
+else if(tab===4){el.innerHTML=renderTrainingUI();renderTrainingContent();}
+}
+let tournState=null,lastTournTime=0;
+const TOURN_CD=2*60*1000;
+function renderTournamentUI(){return`${_hdr("🏆","TURNIER","Besiege 4 Bot-Gegner in Folge – eine Niederlage und es ist vorbei!")}
+<div id="tournCont"></div>`;}
+function renderTournamentContent(){
+const el=$i('tournCont');if(!el)return;
+const now=Date.now(),onCd=now-lastTournTime<TOURN_CD,cdL=onCd?Math.ceil((TOURN_CD-(now-lastTournTime))/1000):0;
+if(!tournState){
+el.innerHTML=`<div style="text-align:center;margin-top:16px">
+<div style="font-size:4rem;margin-bottom:12px">🏆</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;margin-bottom:6px;color:var(--gold)">PREIS: 500🪙 + PRIME CARD</div>
+<div style="color:var(--sub);font-size:.82rem;margin-bottom:20px">4 Gegner in Folge · Jeder Fighter nur einmal</div>
+${myCol.length<4?'<div style="color:var(--red);font-size:.82rem">Mindestens 4 Fighter benötigt!</div>':
+onCd?`<div style="color:var(--sub);font-size:.82rem">⏳ ${_f(cdL/60)}:${(cdL%60+'').padStart(2,'0')}</div>`:
+'<button class="btn btn-r" style="padding:14px 44px;font-size:.95rem;letter-spacing:3px" onclick="startTournament()">TURNIER STARTEN</button>'}
+</div>`;
+return;
+}
+const round=tournState.round,opp=tournState.opponents[round-1],results=tournState.results;
+const roundNames=["Viertelfinale","Halbfinale","Finale","Großfinale"];
+let html=`<div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px;flex-wrap:wrap">`;
+[1,2,3,4].forEach(r=>{
+const res=results[r-1];
+const bg=res==="win"?"rgba(34,197,94,.2)":res==="loss"?"rgba(229,9,20,.2)":r===round?"rgba(245,166,35,.15)":"rgba(255,255,255,.03)";
+const border=res==="win"?"#22c55e":res==="loss"?"var(--red)":r===round?"var(--gold)":"rgba(255,255,255,.1)";
+const icon=res==="win"?"✅":res==="loss"?"❌":r===round?"⚔️":"🔒";
+html+=`<div style="background:${bg};border:1px solid ${border};border-radius:10px;padding:8px 12px;font-size:.72rem;letter-spacing:2px;text-align:center;min-width:80px"><div>${icon}</div><div style="margin-top:3px;color:var(--sub)">${roundNames[r-1]}</div></div>`;
+});
+html+=`</div>`;
+if(tournState.done){
+const won=results.every(r=>r==="win"),pf=tournState.prizeCard;
+html+=`<div style="text-align:center;padding:28px;background:rgba(255,255,255,.03);border-radius:14px;border:1px solid rgba(255,255,255,.08)">
+<div style="font-size:4.5rem">${won?"🏆":"💀"}</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;margin:10px 0;color:${won?"var(--gold)":"var(--red)"};">${won?"CHAMPION!":"AUSGESCHIEDEN"}</div>
+${won&&pf?`<div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);border-radius:10px;padding:14px;margin:12px 0">
+<div style="font-size:.65rem;letter-spacing:3px;color:var(--sub);margin-bottom:4px">PRIME CARD GEWONNEN</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold)">${pf.name}</div>
+<div style="${_G}">${'★'.repeat(pf.stars)}</div></div>`:""}
+<div style="color:var(--sub);margin-bottom:16px">${won?"500🪙 + PRIME hinzugefügt!":"Mehr Glück beim nächsten Mal..."}</div>
+<button class="btn btn-r" style="padding:11px 32px;letter-spacing:2px" onclick="tournState=null;renderTournamentContent()">NOCHMAL</button>
+</div>`;
+el.innerHTML=html;return;
+}
+const used=tournState.usedIdx||[];
+const avail=myCol.map((f,i)=>({f,i})).filter(({i})=>!used.includes(i)).sort((a,b)=>b.f.stars-a.f.stars);
+html+=`<div style="background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:12px">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:var(--gold);margin-bottom:3px">${roundNames[round-1]}</div>
+<div style="color:var(--sub);font-size:.78rem;margin-bottom:12px">vs Bot: <b style="color:white">${opp.name}</b> ${"★".repeat(opp.stars)} ${opp.prime?'<span class="prime-badge">P</span>':""} (${opp.weight})</div>
+<div style="font-size:.75rem;color:var(--sub);margin-bottom:10px">Wähle deinen Fighter (jeder nur einmal):</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:7px">`;
+avail.slice(0,8).forEach(({f,i})=>{
+html+=`<div class="fighter-card" style="cursor:pointer" onclick="playTournRound(${i})">
+<div><div class="f-name">${f.name}${(f.level||1)>1?' <span class="lvl-badge">LV'+f.level+'</span>':''}</div><div class="f-meta">${f.weight}</div></div>
+<div style="display:flex;align-items:center;gap:5px"><span style="${_G}">${"★".repeat(f.stars)}</span>${f.prime?'<span class="prime-badge">P</span>':''}</div>
+</div>`;
+});
+html+=`</div></div>`;
+el.innerHTML=html;
+}
+function startTournament(){
+if(Date.now()-lastTournTime<TOURN_CD){renderTournamentContent();return;}
+const opps=[...fighters].sort(()=>_r()-.5).slice(0,4);
+tournState={round:1,opponents:opps,results:[],done:false,usedIdx:[],prizeCard:null};
+renderTournamentContent();
+}
+function playTournRound(fi){
+if(!tournState)return;
+const myF=myCol[fi],opp=tournState.opponents[tournState.round-1];
+tournState.usedIdx.push(fi);
+const{winner,method}=runFight(myF,opp);
+const won=winner.name===myF.name;
+tournState.results.push(won?"win":"loss");
+fightHist.unshift(`[TURNIER] ${myF.name} vs ${opp.name} → ${won?"WIN":"LOSS"} (${method})`);
+recordRivalry(myF.name,opp.name,won);
+if(!won||tournState.round===4){
+tournState.done=true;
+if(won){
+lastTournTime=Date.now();
+coins+=500;
+const prime=clone(rand(fighters.filter(f=>f.prime)));
+prime.level=1;prime.upgrades=0;
+myCol.push(prime);
+tournState.prizeCard=prime;
+addNotif("🏆","Turnier gewonnen!",`500🪙 + ${prime.name} (PRIME) gewonnen!`);
+updateTopbar();saveUser();checkAchievements();
+} else {
+lastTournTime=Date.now();
+toast("💀 Ausgeschieden! 2 Min Cooldown.","red");
+}
+} else {
+tournState.round++;
+toast(won?`Runde ${tournState.round-1} gewonnen! Weiter!`:"","green");
+}
+renderTournamentContent();
+}
+function renderRandomUI(){return`${_hdr("🎲 RANDOM","FIGHT","Zwei zufällige Fighter – +15🪙 gratis!")}
+<div id="randomCont"></div>`;}
+function renderRandomContent(){
+const el=$i('randomCont');if(!el)return;
+el.innerHTML=`<div style="text-align:center;padding:24px;background:var(--card-bg);border:1px solid var(--border);border-radius:14px;margin-bottom:16px">
+<div style="font-size:3rem;margin-bottom:10px">🎲</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;margin-bottom:6px;color:var(--sub)">WÜRFELN & KÄMPFEN</div>
+<button class="btn btn-r" style="padding:13px 40px;font-size:.95rem;letter-spacing:3px;margin-bottom:6px" onclick="doRandomFight()">🎲 RANDOM FIGHT</button>
+<div class="tx-sub">Jeder gegen Jeden – komplett zufällig</div>
+</div>
+<div id="randomResultCont"></div>`;
+}
+function doRandomFight(){
+const shuffled=[...fighters].sort(()=>_r()-.5);
+const f1=shuffled[0],f2=shuffled[1];
+const{winner,loser,method}=runFight(f1,f2);
+const reward=15;coins+=reward;
+fightHist.unshift(`[RANDOM] ${f1.name} vs ${f2.name} → ${winner.name} (${method})`);
+recordRivalry(f1.name,f2.name,winner.name===f1.name);
+updateTopbar();saveUser();
+const q1=getFighterQuote(f1.name),q2=getFighterQuote(f2.name);
+const html=buildResultHTML(f1,f2,winner,method,reward,'',q1,q2);
+const el=$i('randomResultCont');
+if(el)el.innerHTML=html;
+toast(`${winner.name} gewinnt! +${reward}🪙`,'gold');
+}
+function renderPredictorUI(){
+const sorted=[...fighters].sort((a,b)=>b.stars-a.stars);
+return`${_hdr("🔮 FIGHT","PREDICTOR","KI analysiert Stats & sagt Sieger voraus")}
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+<div><div style="font-size:.68rem;color:var(--sub);letter-spacing:2px;margin-bottom:5px">FIGHTER A</div>
+<select id="predF1" style="width:100%" onchange="updatePrediction()">${sorted.map(f=>`<option value="${f.name}||${f.weight}">${f.name} · ${'★'.repeat(f.stars)}${f.prime?' ✦':''}</option>`).join('')}</select></div>
+<div><div style="font-size:.68rem;color:var(--sub);letter-spacing:2px;margin-bottom:5px">FIGHTER B</div>
+<select id="predF2" style="width:100%" onchange="updatePrediction()">${sorted.map((f,i)=>`<option value="${f.name}||${f.weight}"${i===1?' selected':''}>${f.name} · ${'★'.repeat(f.stars)}${f.prime?' ✦':''}</option>`).join('')}</select></div>
+</div>
+<div id="predResult"></div>`;
+}
+function renderPredictorContent(){updatePrediction();}
+function updatePrediction(){
+const v1=($i('predF1')||{}).value||'';
+const v2=($i('predF2')||{}).value||'';
+const el=$i('predResult');if(!el)return;
+if(!v1||!v2){el.innerHTML='';return;}
+const[n1,w1]=v1.split('||'),[n2,w2]=v2.split('||');
+const f1=fighters.find(x=>x.name===n1&&x.weight===w1),f2=fighters.find(x=>x.name===n2&&x.weight===w2);
+if(!f1||!f2||f1.name===f2.name){el.innerHTML='<div style="color:var(--sub);text-align:center;padding:20px">Zwei verschiedene Fighter wählen</div>';return;}
+function baseScore(f){const s=f.stats;return(s.STR*.22+s.GRP*.18+s.SPD*.18+s.PWR*.20+s.CHN*.12+s.CRD*.10)*(f.prime?1.15:1)*((f.level||1)*0.05+0.95);}
+const b1=baseScore(f1),b2=baseScore(f2),total=b1+b2;
+const pct1=_rd((b1/total)*100),pct2=100-pct1;
+const fav=pct1>=pct2?f1:f2,favPct=_mx(pct1,pct2);
+function catWin(fa,fb,keys){return keys.reduce((a,k)=>a+(fa.stats[k]||70),0)>=keys.reduce((a,k)=>a+(fb.stats[k]||70),0)?fa:fb;}
+const stW=catWin(f1,f2,['STR','SPD','PWR']),grW=catWin(f1,f2,['GRP','CHN','CRD']);
+const meth=f1.stats.GRP>85||f2.stats.GRP>85?'Submission':favPct>65?'KO/TKO':'Decision';
+const s1=f1.stats,s2=f2.stats;
+el.innerHTML=`<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:16px">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px">
+<div class="tc-f1"><div class="tx-h">${f1.name}</div><div style="color:var(--sub);font-size:.7rem">${'★'.repeat(f1.stars)}</div></div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--red)">VS</div>
+<div class="tc-f1"><div class="tx-h">${f2.name}</div><div style="color:var(--sub);font-size:.7rem">${'★'.repeat(f2.stars)}</div></div>
+</div>
+<div style="margin-bottom:12px">
+<div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--sub);margin-bottom:3px"><span>${pct1}%</span><span>SIEGCHANCE</span><span>${pct2}%</span></div>
+<div style="height:12px;border-radius:6px;overflow:hidden;display:flex"><div style="width:${pct1}%;background:var(--red)"></div><div style="width:${pct2}%;background:var(--blue)"></div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px;text-align:center">
+<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:8px"><div style="font-size:.6rem;color:var(--sub);letter-spacing:1px;margin-bottom:2px">STRIKING</div><div style="font-weight:700;font-size:.8rem;color:${stW===f1?'var(--red)':'var(--blue)'}">${stW.name.split(' ')[0]}</div></div>
+<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:8px"><div style="font-size:.6rem;color:var(--sub);letter-spacing:1px;margin-bottom:2px">GRAPPLING</div><div style="font-weight:700;font-size:.8rem;color:${grW===f1?'var(--red)':'var(--blue)'}">${grW.name.split(' ')[0]}</div></div>
+<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:8px"><div style="font-size:.6rem;color:var(--sub);letter-spacing:1px;margin-bottom:2px">METHODE</div><div style="font-weight:700;font-size:.78rem;color:var(--gold)">${meth}</div></div>
+</div>
+<div style="background:${fav===f1?'rgba(229,9,20,.1)':'rgba(59,130,246,.1)'};border:1px solid ${fav===f1?'rgba(229,9,20,.3)':'rgba(59,130,246,.3)'};border-radius:10px;padding:13px;text-align:center;margin-bottom:12px">
+<div style="font-size:.63rem;letter-spacing:3px;color:var(--sub);margin-bottom:4px">KI-VORHERSAGE</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:${fav===f1?'var(--red)':'var(--blue)'}">🏆 ${fav.name}</div>
+<div style="font-size:.76rem;color:var(--sub);margin-top:3px">Siegchance: <b style="color:white">${favPct}%</b> · <b style="color:white">${meth}</b></div>
+</div>
+<div style="background:rgba(255,255,255,.02);border-radius:9px;padding:9px">
+${statKeys.map(k=>{const v1=s1[k]||70,v2=s2[k]||70;const c1=v1>v2?'#22c55e':v1<v2?'var(--red)':'#888',c2=v2>v1?'#22c55e':v2<v1?'var(--red)':'#888';
+return`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;font-size:.7rem"><div style="width:22px;text-align:right;font-weight:700;color:${c1}">${v1}</div><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;position:relative"><div style="position:absolute;right:50%;width:${_mx(0,v1-v2)/2}%;height:100%;background:${c1}"></div><div style="position:absolute;left:50%;width:${_mx(0,v2-v1)/2}%;height:100%;background:${c2}"></div></div><div style="width:22px;font-weight:700;color:${c2}">${v2}</div><div style="width:26px;text-align:center;color:var(--sub);font-size:.63rem">${k}</div></div>`;
+}).join('')}
+</div>
+</div>`;
+}
+let infoWeightFilter='';
+function renderFighterInfoUI(){
+return`${_hdr("🎴 FIGHTER","INFO","Alle ${fighters.length} Fighter – tippe zum Aufklappen")}
+
+<input id="fiSearch" type="text" placeholder="🔍 Fighter suchen..." oninput="filterFighterInfo()" style="width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:white;font-family:Barlow,sans-serif;font-size:.85rem;outline:none;margin-bottom:10px">
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
+${['','Bantamweight','Featherweight','Lightweight','Welterweight','Middleweight','Heavyweight'].map((w,i)=>{
+const labels=['Alle','BW','FW','LW','WW','MW','HW'];
+return`<button class="btn ${!w?'btn-r':'btn-gh'}" id="fiBtn${i}" style="padding:4px 10px;font-size:.7rem;flex:unset" onclick="setInfoW('${w}',${i})">${labels[i]}</button>`;
+}).join('')}
+</div>
+<div id="fighterInfoList"></div>`;
+}
+function setInfoW(w,btnIdx){
+infoWeightFilter=w;
+$a('[id^="fiBtn"]').forEach((b,i)=>{b.className='btn '+(i===btnIdx?'btn-r':'btn-gh');b.style.cssText='padding:4px 10px;font-size:.7rem;flex:unset';});
+filterFighterInfo();
+}
+function filterFighterInfo(){
+const q=($i('fiSearch')||{}).value?.toLowerCase()||'';
+const list=$i('fighterInfoList');if(!list)return;
+const pool=fighters.filter(f=>(!infoWeightFilter||f.weight===infoWeightFilter)&&(!q||f.name.toLowerCase().includes(q)||f.weight.toLowerCase().includes(q))).sort((a,b)=>b.stars-a.stars||(b.prime-a.prime));
+if(!pool.length){list.innerHTML='<div class="empty"><div class="icon">🎴</div><p>Keine Fighter gefunden</p></div>';return;}
+const inOwn=name=>myCol.some(c=>c.name===name);
+list.innerHTML=pool.map(f=>{
+const avg=_rd(Object.values(f.stats).reduce((a,b)=>a+b,0)/6);
+const best=statKeys.reduce((a,k)=>f.stats[k]>f.stats[a]?k:a,statKeys[0]);
+const id='fi_'+f.name.replace(/[^a-z0-9]/gi,'_');
+return`<div class="fighter-card${f.prime?' prime':''}" style="flex-direction:column;align-items:stretch;cursor:pointer;margin-bottom:7px" onclick="toggleCardStats('${id}')">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div><div style="font-weight:700;font-size:.9rem">${f.name}${f.prime?' <span class="prime-badge">P</span>':''}</div>
+<div style="font-size:.7rem;color:var(--sub);margin-top:1px">${f.weight} · ${'★'.repeat(f.stars)} · OVR ${avg} · Best: ${best}</div></div>
+<div style="display:flex;align-items:center;gap:5px">${inOwn(f.name)?'<span style="font-size:.6rem;color:#22c55e;font-weight:700">✓ OWNED</span>':''}<span class="tx-sub">▼</span></div>
+</div>
+<div id="${id}" style="display:none;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)">
+${renderStatBars(f.stats)}
+<div style="display:flex;gap:5px;margin-top:7px;flex-wrap:wrap">
+<button class="btn btn-gh" style="padding:4px 10px;font-size:.7rem;flex:unset" onclick="event.stopPropagation();loadFighterIntoFight('${f.name}','${f.weight}')">⚔️ In Fight</button>
+<button class="btn btn-gh" style="padding:4px 10px;font-size:.7rem;flex:unset" onclick="event.stopPropagation();loadFighterIntoPredictor('${f.name}','${f.weight}')">🔮 Predictor</button>
+</div>
+</div>
+</div>`;
+}).join('');
+}
+function loadFighterIntoFight(name,weight){
+switchPage('fight',$a('.page-nav-btn')[1]);
+setTimeout(()=>{
+setPool('all');
+const s=$i('fl1');
+if(s)for(let i=0;i<s.options.length;i++){if(s.options[i].value.startsWith(name+'||')){s.selectedIndex=i;break;}}
+updateFightPreview();
+toast(name+' als Fighter 1 geladen','blue');
+},200);
+}
+function loadFighterIntoPredictor(name,weight){
+switchPage('extra',$a('.page-nav-btn')[5]);
+currentInnerTab=2;
+$a('.inner-tab').forEach((b,i)=>{b.className='inner-tab'+(i===2?' active':'');});
+setTimeout(()=>{
+renderPredictorUI_inject();
+const s=$i('predF1');
+if(s)for(let i=0;i<s.options.length;i++){if(s.options[i].value.startsWith(name+'||')){s.selectedIndex=i;break;}}
+updatePrediction();
+toast(name+' im Predictor','blue');
+},200);
+}
+function renderPredictorUI_inject(){
+const el=$i('mainContent');
+if(el)el.innerHTML=renderPredictorUI();
+}
+const TRAIN_DUR=4*60*60*1000;
+let trainingSlots=[null,null,null];
+function renderTrainingUI(){return`${_hdr("🏋️ TRAINING","CAMP","Bis zu 3 Fighter gleichzeitig – nach 4h gibt es Stat-Punkte")}
+<div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:.78rem;color:var(--sub)">💡 Belohnung: <b style="color:white">+2 zu einem zufälligen Stat</b> + <b style="color:white">50🪙</b></div><div id="trainingCont"></div>`;}
+function renderTrainingContent(){
+const el=$i('trainingCont');if(!el)return;
+const now=Date.now();
+let html='';
+for(let slot=0;slot<3;slot++){
+const tr=trainingSlots[slot];
+if(!tr){
+html+=`<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:3px;color:var(--sub);margin-bottom:8px">TRAININGSPLATZ ${slot+1}</div>
+${myCol.length?`<select id="tSel${slot}" style="width:100%;margin-bottom:8px">
+${myCol.map((f,i)=>`<option value="${i}">${f.name} (LV${f.level||1}) ${'★'.repeat(f.stars)}</option>`).join('')}
+</select>
+<button class="btn btn-bl" onclick="startTraining(${slot})" style="width:100%;padding:8px;font-size:.8rem">🏋️ Training starten</button>`:'<div style="color:var(--sub);font-size:.8rem">Keine Fighter in Collection</div>'}
+</div>`;
+} else {
+const f=myCol[tr.idx];
+const elapsed=now-tr.startTime;
+const done=elapsed>=TRAIN_DUR;
+const pct=_m(100,(elapsed/TRAIN_DUR)*100);
+const rem=TRAIN_DUR-elapsed;
+const hh=_f(rem/3600000),mm=_f((rem%3600000)/60000);
+html+=`<div style="background:var(--card-bg);border:1px solid rgba(59,130,246,.2);border-radius:12px;padding:14px;margin-bottom:10px">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:3px;color:${done?'#22c55e':'var(--blue)'};margin-bottom:6px">PLATZ ${slot+1} – ${f?f.name:'???'}</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<div style="flex:1;height:7px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${done?'#22c55e':'var(--blue)'};border-radius:4px;transition:width .5s"></div></div>
+<div class="tx-sub">${done?'FERTIG!':hh+'h '+mm+'m'}</div>
+</div>
+${done?`<button class="btn btn-gr" style="width:100%;padding:8px;font-size:.8rem" onclick="collectTraining(${slot})">✅ BELOHNUNG ABHOLEN</button>`:
+`<button class="btn btn-gh" style="width:100%;padding:7px;font-size:.78rem" onclick="cancelTraining(${slot})">Abbrechen</button>`}
+</div>`;
+}
+}
+el.innerHTML=html;
+if(trainingSlots.some(s=>s&&(Date.now()-s.startTime)<TRAIN_DUR)){setTimeout(renderTrainingContent,15000);}
+}
+function startTraining(slot){
+const sel=document.getElementById('tSel'+slot);if(!sel||sel.value===''){toast('Fighter wählen!','red');return;}
+const idx=_i(sel.value);
+if(trainingSlots.some(s=>s&&s.idx===idx)){toast('Dieser Fighter trainiert bereits!','red');return;}
+trainingSlots[slot]={idx,startTime:Date.now()};
+toast('Training gestartet! Komm in 4h wieder.','blue');
+renderTrainingContent();
+}
+function cancelTraining(slot){trainingSlots[slot]=null;renderTrainingContent();}
+function collectTraining(slot){
+const tr=trainingSlots[slot];if(!tr)return;
+const f=myCol[tr.idx];if(!f){trainingSlots[slot]=null;renderTrainingContent();return;}
+const statToBoost=rand(statKeys);
+f.stats[statToBoost]=_m(99,(f.stats[statToBoost]||70)+2);
+coins+=50;
+toast(`${f.name}: +2 ${statToBoost} + 50🪙`,'green');
+trainingSlots[slot]=null;
+updateTopbar();saveUser();renderTrainingContent();
+}
+$i('loginMsg').textContent='';
+setTimeout(()=>{if($i('wCanvas'))drawWheel();},100);
+</script>
+</body>
+</html>
